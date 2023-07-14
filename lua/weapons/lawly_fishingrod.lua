@@ -21,22 +21,29 @@ SWEP.DrawAmmo			= false
 SWEP.DrawCrosshair		= false
 
 SWEP.ThrowSound = Sound("weapons/tripwire/ropeshoot.wav")
-SWEP.SpoolSound = Sound("npc/stalker/go_alert2.wav")
-SWEP.TaughtSound = Sound("physics/wood/wood_strain6.wav")
+SWEP.TaughtSound = Sound("physics/wood/wood_strain7.wav")
+SWEP.SpoolSound = Sound("npc/stalker/wood_strain6.wav")
 SWEP.JumpscareSound = Sound("npc/stalker/go_alert2.wav")
 
 SWEP.LineStatus = "In" // In, Out, Moving
 SWEP.Catch = nil
 SWEP.Bobber = nil
 SWEP.Line = nil
-SWEP.ThrowStrength = 500
+SWEP.ThrowStrength = 500 -- Multiplier for physics, based on charge time
 
-SWEP.CastTime = 4 -- How long to wait before letting the bobber be pulled back in.
-SWEP.BobberPlaceTime = 0
+SWEP.CastTime = 4 -- How long to wait for water before auto-reeling.
+SWEP.BobberPlaceTime = 0 -- When the bobber hit water
 
 SWEP.MaxChargeTime = 3
 SWEP.ChargeTime = 0
 SWEP.Charging = 0
+
+-- :)
+function SWEP:SpoolSoundRandom()
+    local rnd = math.random(0,1000)
+    if rnd <= 1 then return self.JumpscareSound end
+    return self.SpoolSound
+end
 
 function SWEP:SetupDataTables()
     self:NetworkVar("Float", 0, "StartChargeTime")
@@ -54,6 +61,8 @@ if CLIENT then
     end
     return
 end
+
+--NO CLIENT REALM BEYOND THIS POINT
 
 function SWEP:PrimaryAttack()
     return false
@@ -91,7 +100,7 @@ function SWEP:ThrowLine()
 end
 
 function SWEP:ReturnLine()
-    self:EmitSound(self.SpoolSound)
+    self:EmitSound(self:SpoolSoundRandom())
     self.LineStatus = "PullingIn"
     if IsValid(self.Bobber) and self.LineStatus == "PullingIn" then 
         self.Bobber:GetPhysicsObject():SetVelocity((self.Owner:GetPos() - self.Bobber:GetPos() + Vector(0,0,self.BobberDist/3))*2)
@@ -105,25 +114,9 @@ function SWEP:ReturnLine()
 end
 
 function SWEP:Think()
-    local MousePress = self.Owner:KeyPressed(IN_ATTACK)
-    local MouseRelease = self.Owner:KeyReleased(IN_ATTACK)
+    self:Input()
 
-    if MousePress and self.LineStatus == "In" then
-        MsgN("Charging")
-        self.Charging = CurTime()
-        self:SetStartChargeTime(self.Charging)
-    end
-    if MousePress and self.LineStatus == "Out" then
-        MsgN("Returned")
-        self:ReturnLine()
-    end
-    if MouseRelease and self.Charging > 0 then
-        MsgN("Throwing")
-        self.ChargeTime = math.min(CurTime() - self.Charging, self.MaxChargeTime)
-        self.Charging = 0
-        self:SetStartChargeTime(self.Charging)
-        self:ThrowLine()
-    end
+    --Check for when bobber lands in water
     if self.LineStatus == "ThrowingOut" then
         if self.Bobber:IsInWater() then
             MsgN("Line Out")
@@ -132,12 +125,47 @@ function SWEP:Think()
             self:EmitSound(self.TaughtSound)
         end
     end
-    if IsValid(self.Line) and IsValid(self.Bobber) then
-        self.BobberDist = self:GetPos():Distance(self.Bobber:GetPos())
-        self.Line:SetKeyValue( "length", self.BobberDist + 80 )
-        if self.LineStatus == "ThrowingOut" and self.BobberPlaceTime < CurTime() - self.CastTime then
-            self.LineStatus = "InvalidPlacement"
-            self:ReturnLine()
-        end
+
+    --Bit of cleanup in case one or the other is removed.
+    local bobberExists = IsValid(self.Bobber)
+    local lineExists = IsValid(self.Line)
+
+    if !lineExists or !bobberExists then
+        if bobberExists then self.Bobber:Remove() end
+        if lineExists then self.Line:Remove() end
+        return
+    end
+
+    --Adjust rope length, and check for cast timeout
+    self.BobberDist = self:GetPos():Distance(self.Bobber:GetPos())
+    self.Line:SetKeyValue( "length", self.BobberDist + 80 )
+    if self.LineStatus == "ThrowingOut" and self.BobberPlaceTime < CurTime() - self.CastTime then
+        self.LineStatus = "InvalidPlacement"
+        self:ReturnLine()
+    end
+end
+
+function SWEP:Input()
+    local MousePress = self.Owner:KeyPressed(IN_ATTACK)
+    local MouseRelease = self.Owner:KeyReleased(IN_ATTACK)
+    
+    --Start charging throw, holding LMB
+    if MousePress and self.LineStatus == "In" then
+        MsgN("Charging")
+        self.Charging = CurTime()
+        self:SetStartChargeTime(self.Charging)
+    end
+    --Return line on LMB
+    if MousePress and self.LineStatus == "Out" then
+        MsgN("Returned")
+        self:ReturnLine()
+    end
+    --Throw line after charging
+    if MouseRelease and self.Charging > 0 then
+        MsgN("Throwing")
+        self.ChargeTime = math.min(CurTime() - self.Charging, self.MaxChargeTime)
+        self.Charging = 0
+        self:SetStartChargeTime(self.Charging)
+        self:ThrowLine()
     end
 end
