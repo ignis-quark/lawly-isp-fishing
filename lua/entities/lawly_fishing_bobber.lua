@@ -11,11 +11,16 @@ if SERVER then
         self:SetModel(self.Model)
         self:PhysicsInit(SOLID_VPHYSICS)
     end
+
+    function ENT:IsInWater()
+        local PointCont = util.PointContents(self:GetPos() - Vector(0,0,5))
+        return bit.band(PointCont, CONTENTS_WATER) == CONTENTS_WATER
+    end
 end
 if CLIENT then
-function ENT:Initialize()
-    self:SetModel(self.Model)
-    self:SetMoveType(MOVETYPE_VPHYSICS)
-    self:SetSolid(SOLID_VPHYSICS)
-end
+    function ENT:Initialize()
+        self:SetModel(self.Model)
+        self:SetMoveType(MOVETYPE_VPHYSICS)
+        self:SetSolid(SOLID_VPHYSICS)
+    end
 end

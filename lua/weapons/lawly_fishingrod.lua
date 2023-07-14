@@ -20,8 +20,10 @@ SWEP.SlotPos			= 1
 SWEP.DrawAmmo			= false
 SWEP.DrawCrosshair		= false
 
-SWEP.ThrowSound = Sound("ambient/machines/squeak_1.wav")
-SWEP.SpoolSound = Sound("combined/eli_lab/eli_lab_eli_surface_cc.wav")
+SWEP.ThrowSound = Sound("weapons/tripwire/ropeshoot.wav")
+SWEP.SpoolSound = Sound("npc/stalker/go_alert2.wav")
+SWEP.TaughtSound = Sound("physics/wood/wood_strain6.wav")
+SWEP.JumpscareSound = Sound("npc/stalker/go_alert2.wav")
 
 SWEP.LineStatus = "In" // In, Out, Moving
 SWEP.Catch = nil
@@ -29,7 +31,7 @@ SWEP.Bobber = nil
 SWEP.Line = nil
 SWEP.ThrowStrength = 500
 
-SWEP.CastTime = 1 -- How long to wait before letting the bobber be pulled back in.
+SWEP.CastTime = 4 -- How long to wait before letting the bobber be pulled back in.
 SWEP.BobberPlaceTime = 0
 
 SWEP.MaxChargeTime = 3
@@ -43,9 +45,10 @@ end
 if CLIENT then
     function SWEP:DrawHUD()
         draw.NoTexture()
-        surface.SetDrawColor(200,0,100, 180)
         if self:GetStartChargeTime() != 0 then
-            local StrengthHeight = ScrH()*0.2 * math.Clamp((CurTime() - self:GetStartChargeTime()) / self.MaxChargeTime, 0, 1)
+            local chargeRatio = math.Clamp((CurTime() - self:GetStartChargeTime()) / self.MaxChargeTime, 0, 1)
+            local StrengthHeight = ScrH() * 0.2 * chargeRatio
+            surface.SetDrawColor(255*chargeRatio, 255 - 255*chargeRatio, 0, 180)
             surface.DrawRect(ScrW()*0.3, ScrH()*0.6 - StrengthHeight, ScrW()*0.01, StrengthHeight)
         end
     end
@@ -89,13 +92,14 @@ end
 
 function SWEP:ReturnLine()
     self:EmitSound(self.SpoolSound)
-    if IsValid(self.Bobber) then 
+    self.LineStatus = "PullingIn"
+    if IsValid(self.Bobber) and self.LineStatus == "PullingIn" then 
         self.Bobber:GetPhysicsObject():SetVelocity((self.Owner:GetPos() - self.Bobber:GetPos() + Vector(0,0,self.BobberDist/3))*2)
         timer.Simple(2, function()
             self.Bobber:Remove()
+            self.LineStatus = "In"
         end)
     end
-    self.LineStatus = "In"
     self.BobberPlaceTime = 0
     self.ChargeTime = 0
 end
@@ -120,12 +124,20 @@ function SWEP:Think()
         self:SetStartChargeTime(self.Charging)
         self:ThrowLine()
     end
-    if self.LineStatus == "ThrowingOut" and self.BobberPlaceTime < CurTime() - self.CastTime then
-        MsgN("Line Out")
-        self.LineStatus = "Out"
+    if self.LineStatus == "ThrowingOut" then
+        if self.Bobber:IsInWater() then
+            MsgN("Line Out")
+            self.LineStatus = "Out"
+            self:StopSound(self.ThrowSound)
+            self:EmitSound(self.TaughtSound)
+        end
     end
     if IsValid(self.Line) and IsValid(self.Bobber) then
         self.BobberDist = self:GetPos():Distance(self.Bobber:GetPos())
         self.Line:SetKeyValue( "length", self.BobberDist + 80 )
+        if self.LineStatus == "ThrowingOut" and self.BobberPlaceTime < CurTime() - self.CastTime then
+            self.LineStatus = "InvalidPlacement"
+            self:ReturnLine()
+        end
     end
 end
