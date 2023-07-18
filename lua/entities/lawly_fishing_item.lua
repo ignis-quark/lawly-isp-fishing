@@ -14,11 +14,10 @@ if SERVER then
     function ENT:Initialize()
         self:SetModel(self.Model)
         self:PhysicsInit(SOLID_VPHYSICS)
-        self:SelectRandomItem()
     end
 
-    function ENT:SelectRandomItem()
-        self.ItemTable = LAWLYFISH.FishList[math.random(#LAWLYFISH.FishList)]
+    function ENT:SetItem(item)
+        self.ItemTable = item
         self:SetModel(self.ItemTable.Mdl)
     end
 end

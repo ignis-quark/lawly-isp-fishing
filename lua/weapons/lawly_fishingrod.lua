@@ -133,7 +133,7 @@ function SWEP:ReturnLine()
 end
 
 function SWEP:Think()
-    self:Input()
+    self:DoInput()
 
     --Check for when bobber lands in water
     if self.LineStatus == "ThrowingOut" then
@@ -156,7 +156,7 @@ function SWEP:Think()
         return
     end
 
-    --Adjust rope length, and check for cast timeout
+    --Adjust rope length, and check for cast timeoutcode
     self.BobberDist = self:GetPos():Distance(self.Bobber:GetPos())
     self.Line:SetKeyValue( "length", self.BobberDist + 80 )
     if self.LineStatus == "ThrowingOut" and self.BobberPlaceTime < CurTime() - self.CastTime then
@@ -167,7 +167,7 @@ end
 
 
 
-function SWEP:Input()
+function SWEP:DoInput()
     local MousePress = self.Owner:KeyPressed(IN_ATTACK)
     local MouseRelease = self.Owner:KeyReleased(IN_ATTACK)
     

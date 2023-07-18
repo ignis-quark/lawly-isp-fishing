@@ -1,0 +1,1 @@
+LAWLYFISH = LAWLYFISH or {}
