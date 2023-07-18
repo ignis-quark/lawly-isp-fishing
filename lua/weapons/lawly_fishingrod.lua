@@ -25,7 +25,7 @@ SWEP.TaughtSound = Sound("physics/wood/wood_strain7.wav")
 SWEP.SpoolSound = Sound("npc/stalker/wood_strain6.wav")
 SWEP.JumpscareSound = Sound("npc/stalker/go_alert2.wav")
 
-SWEP.LineStatus = "In" // In, Out, Moving
+SWEP.LineStatus = "In" // In, Out, ThrowingOut, PullingIn, ItemHooked
 SWEP.Catch = nil
 SWEP.Bobber = nil
 SWEP.Line = nil
@@ -37,6 +37,14 @@ SWEP.BobberPlaceTime = 0 -- When the bobber hit water
 SWEP.MaxChargeTime = 3
 SWEP.ChargeTime = 0
 SWEP.Charging = 0
+
+SWEP.RandNibbleTime = 0
+SWEP.MinWait = 10
+SWEP.MaxWait = 30
+SWEP.BobTime = 0
+SWEP.LastNibble = 0
+SWEP.NibblePullWindow = 2
+SWEP.HookedItem = nil
 
 -- :)
 function SWEP:SpoolSoundRandom()
@@ -73,7 +81,11 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:TugLine()
-
+    if self.LastNibble + self.NibblePullWindow < CurTime() then return end
+    self.LineStatus = "ItemHooked"
+    self.HookedItem = ents.Create("lawly_fishing_item")
+    self.HookedItem:SetPos(self.Bobber:GetPos())
+    self.HookedItem:SetParent(self.Bobber)
 end
 
 function SWEP:ThrowLine()
@@ -99,12 +111,19 @@ function SWEP:ThrowLine()
     end
 end
 
+function SWEP:GetBucket()
+    for _, ent in ipairs(ents.FindInSphere(self:GetPos(), 50)) do
+        if ent:GetClass() != "lawly_fishing_bucket" then continue end
+    end
+end
+
 function SWEP:ReturnLine()
     self:EmitSound(self:SpoolSoundRandom())
     self.LineStatus = "PullingIn"
     if IsValid(self.Bobber) and self.LineStatus == "PullingIn" then 
         self.Bobber:GetPhysicsObject():SetVelocity((self.Owner:GetPos() - self.Bobber:GetPos() + Vector(0,0,self.BobberDist/3))*2)
         timer.Simple(2, function()
+            if IsValid(self.HookedItem) and IsValid(self:GetBucket()) then self.Bucket:AddItem(self.HookedItem) end
             self.Bobber:Remove()
             self.LineStatus = "In"
         end)
@@ -123,6 +142,7 @@ function SWEP:Think()
             self.LineStatus = "Out"
             self:StopSound(self.ThrowSound)
             self:EmitSound(self.TaughtSound)
+            self:CalcNextRandTime()
         end
     end
 
@@ -144,6 +164,8 @@ function SWEP:Think()
         self:ReturnLine()
     end
 end
+
+
 
 function SWEP:Input()
     local MousePress = self.Owner:KeyPressed(IN_ATTACK)
@@ -168,4 +190,22 @@ function SWEP:Input()
         self:SetStartChargeTime(self.Charging)
         self:ThrowLine()
     end
+
+    self:DoCatchTimer()
+end
+
+function SWEP:CalcNextRandTime()
+    self.RandNibbleTime = math.Rand(self.MinWait, self.MaxWait) + self.BobberPlaceTime
+end
+
+function SWEP:DoCatchTimer()
+    if self.LineStatus != "Out" then return end
+    if self.RandNibbleTime > CurTime() or self.RandNibbleTime == 0 then return end
+    self:NibbleLine()
+end
+
+function SWEP:NibbleLine()
+    self.Bobber:GetPhysicsObject():SetVelocity(Vector(0,0,-100))
+    self:CalcNextRandTime()
+    self.LastNibble = CurTime()
 end
