@@ -117,6 +117,16 @@ function SWEP:GetBucket()
     end
 end
 
+function SWEP:PullLine()
+    if !IsValid(self.Bobber) then return end
+    local offset = self.Owner:GetPos() - self.Bobber:GetPos()
+    offset:Normalize()
+
+    self.Bobber:GetPhysicsObject():ApplyForceCenter(offset * 100)
+    MsgN(self.BobberDist)
+    if self.BobberDist < 200 then self:ReturnLine() end
+end
+
 function SWEP:ReturnLine()
     self:EmitSound(self:SpoolSoundRandom())
     self.LineStatus = "PullingIn"
@@ -159,6 +169,7 @@ function SWEP:Think()
     --Adjust rope length, and check for cast timeoutcode
     self.BobberDist = self:GetPos():Distance(self.Bobber:GetPos())
     self.Line:SetKeyValue( "length", self.BobberDist + 80 )
+
     if self.LineStatus == "ThrowingOut" and self.BobberPlaceTime < CurTime() - self.CastTime then
         self.LineStatus = "InvalidPlacement"
         self:ReturnLine()
@@ -169,6 +180,7 @@ end
 
 function SWEP:DoInput()
     local MousePress = self.Owner:KeyPressed(IN_ATTACK)
+    local MousePressAlt = self.Owner:KeyPressed(IN_ATTACK2)
     local MouseRelease = self.Owner:KeyReleased(IN_ATTACK)
     
     --Start charging throw, holding LMB
@@ -177,10 +189,14 @@ function SWEP:DoInput()
         self.Charging = CurTime()
         self:SetStartChargeTime(self.Charging)
     end
-    --Return line on LMB
-    if MousePress and self.LineStatus == "Out" then
+    --Return line on RMB
+    if MousePressAlt then
         MsgN("Returned")
         self:ReturnLine()
+    end
+    --Reel in Line
+    if self.Owner:KeyDown(IN_ATTACK) and self.LineStatus == "Out" then
+        self:PullLine()
     end
     --Throw line after charging
     if MouseRelease and self.Charging > 0 then

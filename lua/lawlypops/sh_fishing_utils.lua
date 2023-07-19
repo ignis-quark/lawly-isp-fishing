@@ -49,6 +49,17 @@ function LAWLYFISH:GetRarity(Weight)
     end
     return rarity
 end
+
+function LAWLYFISH:CreateRandomItemEnt(pos)
+    if pos == nil then
+        MsgN("[Fishing] No position provided for generating an item. Escaping.")
+        return
+    end
+    local item = ents.Create("lawly_fishing_item")
+    item:Spawn()
+    item:SetItem(LAWLYFISH:GetRandomItem())
+    return item
+end
 --[[ Only shows items from the basic fish list currently.
 concommand.Add("fishing_listweights", function()
     local tbl = LAWLYFISH.FishList

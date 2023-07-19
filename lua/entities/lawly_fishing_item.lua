@@ -7,8 +7,10 @@ ENT.Type = "anim"
 ENT.PrintName = "Fishing Item"
 
 ENT.Model = "models/props_junk/watermelon01.mdl"
+ENT.BoxModel = "models/props_junk/watermelon01.mdl"
 
 ENT.ItemTable = {}
+ENT.WeaponClass = ""
 
 if SERVER then
     function ENT:Initialize()
@@ -18,7 +20,14 @@ if SERVER then
 
     function ENT:SetItem(item)
         self.ItemTable = item
-        self:SetModel(self.ItemTable.Mdl)
+        if self.ItemTable.Class then
+            self.WeaponClass = self.ItemTable.Class
+        end
+        if self.ItemTable.Mdl then
+            self:SetModel(self.ItemTable.Mdl)
+        else
+            self:SetModel(self.BoxModel)
+        end
     end
 end
 if CLIENT then

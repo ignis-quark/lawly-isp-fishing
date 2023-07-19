@@ -10,6 +10,7 @@ if SERVER then
     function ENT:Initialize()
         self:SetModel(self.Model)
         self:PhysicsInit(SOLID_VPHYSICS)
+        self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
     end
 
     function ENT:IsInWater()
