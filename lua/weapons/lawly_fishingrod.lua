@@ -46,6 +46,9 @@ SWEP.LastNibble = 0
 SWEP.NibblePullWindow = 2
 SWEP.HookedItem = nil
 
+SWEP.BobberDist = 0
+SWEP.BobberOffset = Vector(0,0,0)
+
 -- :)
 function SWEP:SpoolSoundRandom()
     local rnd = math.random(0,1000)
@@ -81,10 +84,10 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:TugLine()
-    if self.LastNibble + self.NibblePullWindow < CurTime() then return end
+    self.Bobber:GetPhysicsObject():ApplyForceCenter(self.BobberOffset * 200)
+    if self.LastNibble() + self.NibblePullWindow < CurTime() then return end
     self.LineStatus = "ItemHooked"
-    self.HookedItem = ents.Create("lawly_fishing_item")
-    self.HookedItem:SetPos(self.Bobber:GetPos())
+    self.HookedItem = LAWLYFISH:CreateRandomItemEnt(self.Bobber:GetPos())
     self.HookedItem:SetParent(self.Bobber)
 end
 
@@ -119,19 +122,18 @@ end
 
 function SWEP:PullLine()
     if !IsValid(self.Bobber) then return end
-    local offset = self.Owner:GetPos() - self.Bobber:GetPos()
     offset:Normalize()
 
     self.Bobber:GetPhysicsObject():ApplyForceCenter(offset * 100)
     MsgN(self.BobberDist)
-    if self.BobberDist < 200 then self:ReturnLine() end
+    if self.BobberDist < 200 then self:ReturnLine() return end
 end
 
 function SWEP:ReturnLine()
     self:EmitSound(self:SpoolSoundRandom())
     self.LineStatus = "PullingIn"
     if IsValid(self.Bobber) and self.LineStatus == "PullingIn" then 
-        self.Bobber:GetPhysicsObject():SetVelocity((self.Owner:GetPos() - self.Bobber:GetPos() + Vector(0,0,self.BobberDist/3))*2)
+        self.Bobber:GetPhysicsObject():SetVelocity((self.BobberOffset + Vector(0,0,self.BobberDist/3))*2)
         timer.Simple(2, function()
             if IsValid(self.HookedItem) and IsValid(self:GetBucket()) then self.Bucket:AddItem(self.HookedItem) end
             self.Bobber:Remove()
@@ -168,6 +170,7 @@ function SWEP:Think()
 
     --Adjust rope length, and check for cast timeoutcode
     self.BobberDist = self:GetPos():Distance(self.Bobber:GetPos())
+    self.BobberOffset = self.Owner:GetPos() - self.Bobber:GetPos()
     self.Line:SetKeyValue( "length", self.BobberDist + 80 )
 
     if self.LineStatus == "ThrowingOut" and self.BobberPlaceTime < CurTime() - self.CastTime then
