@@ -28,8 +28,8 @@ function ENT:RemoveItem(itemnumber)
 end
 
 function ENT:Use(ply)
-    net.Start("lawly_fishing_openmenu")
-        net.WriteUInt(0, 2)
+    net.Start("lawlib_openmenu")
+        net.WriteString("fishing_bucket")
         net.WriteEntity(self)
         net.WriteTable(self.StoredItems)
     net.Send(ply)

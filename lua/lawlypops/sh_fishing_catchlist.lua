@@ -79,14 +79,14 @@ LAWLYFISH.Catches = {
 LAWLYFISH:ApplyWeights(LAWLYFISH.Catches)
 
 LAWLYFISH.Rarities = {
-    {Color=Color(255,255,255), Weight = 100},
-    {Color=Color(0,255,0), Weight = 90},
-    {Color=Color(0,255,255), Weight = 80},
-    {Color=Color(191,89,30), Weight = 60},
-    {Color=Color(255,0,212), Weight = 40},
-    {Color=Color(199,0,0), Weight = 10},
-    {Color=Color(81,0,255), Weight = 1},
-    {Color=Color(236,236,71), Weight = 0.1},
-    {Color=Color(255,200,0), Weight = 0.01}
+    {Color=Color(255,255,255), Weight = 100, Name="Worthless"},
+    {Color=Color(0,255,0), Weight = 90, Name="Common"},
+    {Color=Color(0,255,255), Weight = 80, Name="Uncommon"},
+    {Color=Color(191,89,30), Weight = 60, Name="Rare"},
+    {Color=Color(255,0,212), Weight = 40, Name="Epic"},
+    {Color=Color(199,0,0), Weight = 10, Name="Legendary"},
+    {Color=Color(81,0,255), Weight = 1, Name="Mythical"},
+    {Color=Color(236,236,71), Weight = 0.1, Name="Relic"},
+    {Color=Color(255,200,0), Weight = 0.01, Name="Eternal"}
 }
 LAWLYFISH:ApplyWeights(LAWLYFISH.Rarities)

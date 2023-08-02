@@ -3,6 +3,7 @@ ENT.Type = "anim"
 
 ENT.PrintName = "Fishing Bucket"
 ENT.Spawnable = true
+ENT.Category = "Fishing"
 
 ENT.Model = "models/props_junk/MetalBucket01a.mdl"
 

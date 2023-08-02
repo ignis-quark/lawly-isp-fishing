@@ -2,12 +2,36 @@ LAWLYFISH = LAWLYFISH or {}
 local MENU = {}
 local PNL = nil
 
+MENU.RequiresTable = true
+
 MENU.SortTypes = {
     {Name="RARITY", func=function(tbl) table.SortByMember( tbl, "Weight", true ) end },
     {Name="NAME", func=function(tbl) table.SortByMember( tbl, "Name", true) end },
     {Name="VALUE", func=function(tbl) table.SortByMember( tbl, "Worth", false) end },
     {Name="LENGTH", func=function(tbl) table.SortByMember( tbl, "Length", false) end },
 }
+
+function MENU:SelectItem(index)
+    if !PNL.ItemViewFrame then return end
+    local tbl = MENU.Table[index]
+    MsgN("Selecting item of index " .. index)
+    MsgN("Table: ")
+    PrintTable(tbl)
+    
+    PNL.ItemTitle:SetText(tbl.Name)
+
+    if tbl.Mdl then
+        if tbl.Mdl == "FUCK" then tbl.Mdl = "models/props_phx/facepunch_logo.mdl" end
+        PNL.ModelView:SetModel(tbl.Mdl)
+        PNL.ModelView:SetVisible(true)
+        local ent = PNL.ModelView:GetEntity()
+        local scale = ent:GetModelRadius()
+        PNL.ModelView:SetCamPos(Vector(scale,scale,scale)*2)
+        //PNL.ModelView:SetFOV(scale)
+    else
+        PNL.ModelView:SetVisible(false)
+    end
+end
 
 function MENU:CreateMenu(ent, tbl)
     MENU.Entity = ent
@@ -55,6 +79,12 @@ function MENU:CreateMenu(ent, tbl)
             newItem:Dock(TOP)
             newItem:DockMargin(5,5,5,0)
             newItem:SetBackgroundColor(Color(46,46,46))
+            newItem:SetMouseInputEnabled(true)
+            newItem.Index = i
+
+            function newItem:OnMousePressed()
+                MENU:SelectItem(self.Index)
+            end
 
             newItem.txt = vgui.Create("DLabel", newItem)
             newItem.txt:SetText(item.Name)
@@ -89,14 +119,49 @@ function MENU:CreateMenu(ent, tbl)
         end
     end
     PNL.ItemList:PopulateList(MENU.Table)
+
+    PNL.ItemViewFrame = vgui.Create("DPanel", PNL)
+    PNL.ItemViewFrame:DockMargin(10,10,10,10)
+    PNL.ItemViewFrame:Dock(TOP)
+    PNL.ItemViewFrame:SetBackgroundColor(Color(54,54,54))
+    PNL.ItemViewFrame:SetTall(200)
+
+    PNL.ModelView = vgui.Create("DModelPanel", PNL.ItemViewFrame)
+    PNL.ModelView:Dock(RIGHT)
+    PNL.ModelView:SetVisible(false)
+    PNL.ModelView:SetSize(200,200)
+    PNL.ModelView:SetCamPos(Vector(100,100,100))
+    PNL.ModelView:SetFOV(45)
+    PNL.ModelView:SetLookAt(Vector(0,0,0))
+
+    PNL.ItemTitle = vgui.Create("DLabel", PNL.ItemViewFrame)
+    PNL.ItemTitle:DockMargin(10,10,0,0)
+    PNL.ItemTitle:Dock(TOP)
+    PNL.ItemTitle:SetText("No Item Selected")
+    PNL.ItemTitle:SetFont("DermaLarge")
+    PNL.ItemTitle:SizeToContentsY()
+
+    PNL.ItemPrice = vgui.Create("DLabel", PNL.ItemViewFrame)
+    PNL.ItemPrice:DockMargin(10,10,0,0)
+    PNL.ItemPrice:Dock(TOP)
+    PNL.ItemPrice:SetText("$")
+    PNL.ItemPrice:SetFont("DermaLarge")
+    PNL.ItemPrice:SizeToContentsY()
+
+    PNL.ItemLength = vgui.Create("DLabel", PNL.ItemViewFrame)
+    PNL.ItemLength:DockMargin(10,10,0,0)
+    PNL.ItemLength:Dock(TOP)
+    PNL.ItemLength:SetText("0cm")
+    PNL.ItemLength:SetFont("DermaLarge")
+    PNL.ItemLength:SizeToContentsY()
+
+    PNL.ItemRarity = vgui.Create("DLabel", PNL.ItemViewFrame)
+    PNL.ItemRarity:DockMargin(10,10,0,0)
+    PNL.ItemRarity:Dock(TOP)
+    PNL.ItemRarity:SetText("0cm")
+    PNL.ItemRarity:SetFont("DermaLarge")
+    PNL.ItemRarity:SizeToContentsY()
+
 end
 
-net.Receive("lawly_fishing_openmenu", function()
-    local _Type = net.ReadUInt(2)
-    if _Type == 0 then
-        local ent = net.ReadEntity()
-        if !IsValid(ent) then return end
-        local tbl = net.ReadTable()
-        MENU:CreateMenu(ent, tbl)
-    return end
-end)
+LAWLIB:RegisterMenu("fishing_bucket", MENU)
