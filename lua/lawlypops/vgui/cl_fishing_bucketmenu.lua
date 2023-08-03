@@ -13,16 +13,29 @@ MENU.SortTypes = {
 
 function MENU:SelectItem(index)
     if !PNL.ItemViewFrame then return end
+    surface.PlaySound("items/pickup_quiet_0"..math.random(1,3)..".wav")
     local tbl = MENU.Table[index]
     MsgN("Selecting item of index " .. index)
     MsgN("Table: ")
     PrintTable(tbl)
     
+    local rarity = LAWLYFISH:GetRarity(tbl.Weight)
+
     PNL.ItemTitle:SetText(tbl.Name)
+    PNL.ItemPrice:SetText("$"..tbl.Worth)
+    PNL.ItemRarity:SetText(rarity.Name)
+    PNL.ItemRarity:SetTextColor(rarity.Color)
+
+    PNL.ItemRarity:SetVisible(true)
+    PNL.ItemPrice:SetVisible(true)
 
     if tbl.Mdl then
-        if tbl.Mdl == "FUCK" then tbl.Mdl = "models/props_phx/facepunch_logo.mdl" end
-        PNL.ModelView:SetModel(tbl.Mdl)
+        if tbl.Mdl == "FUCK" then
+            PNL.ModelView:SetModel("models/props/de_inferno/goldfish.mdl")
+            PNL.ModelView:GetEntity():SetMaterial("debug/debugempty")
+        else
+            PNL.ModelView:SetModel(tbl.Mdl)
+        end
         PNL.ModelView:SetVisible(true)
         local ent = PNL.ModelView:GetEntity()
         local scale = ent:GetModelRadius()
@@ -30,6 +43,18 @@ function MENU:SelectItem(index)
         //PNL.ModelView:SetFOV(scale)
     else
         PNL.ModelView:SetVisible(false)
+    end
+    if tbl.Length > 0 then
+        PNL.ItemLength:SetText("Length: " .. math.Round(tbl.Length,2).."cm")
+        local lenCol = Color(255 * (1 - tbl.RandVal), 255 * tbl.RandVal, 0)
+        PNL.ItemLength:SetTextColor(lenCol)
+        PNL.ItemLength:SetVisible(true)
+        PNL.ItemLengthBar:SetFraction(tbl.RandVal)
+        PNL.ItemLengthBar:SetFGColor(lenCol)
+        PNL.ItemLengthBar:SetVisible(true)
+    else
+        PNL.ItemLength:SetVisible(false)
+        PNL.ItemLengthBar:SetVisible(false)
     end
 end
 
@@ -42,6 +67,8 @@ function MENU:CreateMenu(ent, tbl)
     PNL:SetSize(ScrW()*0.8, ScrH()*0.8)
     PNL:Center()
     PNL:MakePopup()
+    surface.PlaySound("items/ammocrate_open.wav")
+    PNL.CloseSound = "items/ammocrate_close.wav"
 
     PNL.ItemListFrame = vgui.Create("DPanel", PNL)
     PNL.ItemListFrame:Dock(LEFT)
@@ -62,6 +89,7 @@ function MENU:CreateMenu(ent, tbl)
         self:SetText("SORTED BY: " .. MENU.SortTypes[self.SortType].Name)
         MENU.SortTypes[self.SortType].func(MENU.Table)
         PNL.ItemList:PopulateList(MENU.Table)
+        surface.PlaySound("buttons/blip1.wav")
     end
 
 
@@ -110,10 +138,10 @@ function MENU:CreateMenu(ent, tbl)
             
             if item.Weight then
                 local rarity = LAWLYFISH:GetRarity(item.Weight)
-                newItem.txt:SetTextColor(LAWLYFISH.Rarities[rarity].Color)
+                newItem.txt:SetTextColor(rarity.Color)
             end
             if item.Class then
-                newItem.txt:SetTextColor(Color(255,255,0))
+                newItem.txt:SetTextColor(Color(198,255,194))
             end
             PNL.ItemList:Add(newItem)
         end
@@ -140,13 +168,24 @@ function MENU:CreateMenu(ent, tbl)
     PNL.ItemTitle:SetText("No Item Selected")
     PNL.ItemTitle:SetFont("DermaLarge")
     PNL.ItemTitle:SizeToContentsY()
+    PNL.ItemTitle:SetTextColor(Color(255,255,255))
+    
+    PNL.ItemRarity = vgui.Create("DLabel", PNL.ItemViewFrame)
+    PNL.ItemRarity:DockMargin(10,10,0,0)
+    PNL.ItemRarity:Dock(TOP)
+    PNL.ItemRarity:SetText("Unknown")
+    PNL.ItemRarity:SetFont("DermaLarge")
+    PNL.ItemRarity:SizeToContentsY()
+    PNL.ItemRarity:SetVisible(false)
 
     PNL.ItemPrice = vgui.Create("DLabel", PNL.ItemViewFrame)
     PNL.ItemPrice:DockMargin(10,10,0,0)
     PNL.ItemPrice:Dock(TOP)
-    PNL.ItemPrice:SetText("$")
+    PNL.ItemPrice:SetText("$0")
     PNL.ItemPrice:SetFont("DermaLarge")
     PNL.ItemPrice:SizeToContentsY()
+    PNL.ItemPrice:SetVisible(false)
+    PNL.ItemPrice:SetTextColor(Color(255,255,255))
 
     PNL.ItemLength = vgui.Create("DLabel", PNL.ItemViewFrame)
     PNL.ItemLength:DockMargin(10,10,0,0)
@@ -154,13 +193,15 @@ function MENU:CreateMenu(ent, tbl)
     PNL.ItemLength:SetText("0cm")
     PNL.ItemLength:SetFont("DermaLarge")
     PNL.ItemLength:SizeToContentsY()
+    PNL.ItemLength:SetVisible(false)
+    PNL.ItemLength:SetTextColor(Color(255,255,255))
 
-    PNL.ItemRarity = vgui.Create("DLabel", PNL.ItemViewFrame)
-    PNL.ItemRarity:DockMargin(10,10,0,0)
-    PNL.ItemRarity:Dock(TOP)
-    PNL.ItemRarity:SetText("0cm")
-    PNL.ItemRarity:SetFont("DermaLarge")
-    PNL.ItemRarity:SizeToContentsY()
+    PNL.ItemLengthBar = vgui.Create("LProgress", PNL.ItemViewFrame)
+    PNL.ItemLengthBar:DockMargin(10,10,10,10)
+    PNL.ItemLengthBar:Dock(FILL)
+    PNL.ItemLengthBar:SetTall(10)
+    PNL.ItemLengthBar:SetFGColor(Color(255,255,255))
+    PNL.ItemLengthBar:SetVisible(false)
 
 end
 

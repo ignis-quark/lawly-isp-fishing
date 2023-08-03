@@ -12,12 +12,13 @@ function ENT:AddItem(ent)
     if !ent then MsgN("A") return end
     tbl = ent
     if IsEntity(ent) then
-        tbl = ent.ItemTable
+        tbl = table.Copy(ent.ItemTable)
         ent:Remove()
     end
     if !tbl.Weight then tbl.Weight = 100 end
     if !tbl.Length then tbl.Length = -1 end
     if !tbl.Worth then tbl.Worth = 0 end
+    if LAWLYFISH:GetRarity(tbl.Weight).Name == "Relic" then self:EmitSound("player/taunt_medic_heroic.wav") MsgN("Got a Relic!") end
     table.insert(self.StoredItems, tbl)
     self:SetItemCount(#self.StoredItems)
 end

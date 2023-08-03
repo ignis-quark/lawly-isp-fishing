@@ -42,22 +42,24 @@ end
 
 --Returns the actual caught item
 function LAWLYFISH:GetRandomItem(seed)
-    if seed == nil then seed = CurTime() end
     local Catch = LAWLYFISH:GetRandomCatch()
-    local Item = LAWLYFISH:SelectFromList(Catch.List)
+    local Item = table.Copy(LAWLYFISH:SelectFromList(Catch.List))
 
-    if Item.Lengths then
+    LAWLYFISH:SelectRandomStats(Item, seed)
+    return Item
+end
+
+function LAWLYFISH:SelectRandomStats(item, seed)
+    if seed == nil then seed = CurTime() end
+    if item.Lengths then
         local randVal = util.SharedRandom(seed, 0, 1)
-        Item.Length = Lerp(randVal, Item.Lengths[1], Item.Lengths[2])
+        item.RandVal = randVal
+        item.Length = Lerp(randVal, item.Lengths[1], item.Lengths[2])
 
-        if Item.Worth > 0 then
-            MsgN(randVal)
-            MsgN(Item.Worth)
-            Item.Worth = Item.Worth - math.floor((1-randVal) * Item.Worth * LAWLYFISH.LengthCostMod)
-            MsgN(Item.Worth)
+        if item.Worth > 0 then
+            item.Worth = item.Worth - math.floor((1-randVal) * item.Worth * LAWLYFISH.LengthCostMod)
         end
     end
-    return Item
 end
 
 function LAWLYFISH:GetRarity(Weight)
@@ -67,7 +69,7 @@ function LAWLYFISH:GetRarity(Weight)
         if Weight > item.Weight then continue end
         rarity = i
     end
-    return rarity
+    return LAWLYFISH.Rarities[rarity]
 end
 
 function LAWLYFISH:CreateRandomItemEnt(pos)
@@ -141,7 +143,18 @@ concommand.Add("fishing_debug_bucket", function(ply, cmd, args)
         MsgN("No Bucket found. Please ensure you're standing near one.")
     return end
     MsgN("Adding items to bucket.")
-    for i=0, 500 do
+
+    if args[1] == "1" then
+        for i, category in ipairs(LAWLYFISH.Catches) do
+            for _i, item in ipairs(category.List) do
+                LAWLYFISH:SelectRandomStats(item, _i)
+                bucket:AddItem(item)
+            end
+        end
+        return
+    end
+
+    for i=0, 100 do
         local newItem = LAWLYFISH:GetRandomItem(i*i)
         bucket:AddItem(newItem)
     end
