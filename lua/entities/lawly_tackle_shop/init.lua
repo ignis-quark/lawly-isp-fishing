@@ -9,8 +9,5 @@ function ENT:Initialize()
 end
 
 function ENT:Use(ply)
-    net.Start("lawlib_openmenu")
-        net.WriteString("fishing_shop")
-        net.WriteEntity(self)
-    net.Send(ply)
+    LAWLIB:SendData("lawlib_openmenu", "fishing_shop", ply, self)
 end

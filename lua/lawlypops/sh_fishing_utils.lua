@@ -1,10 +1,5 @@
 LAWLYFISH = LAWLYFISH or {}
 
-if SERVER then
-    util.AddNetworkString("lawly_fishing_openmenu")
-    util.AddNetworkString("lawly_fishing_senddata")
-end
-
 if LAWLYFISH.Catches == nil then LAWLYFISH.Catches = {} end
 if LAWLYFISH.Rarities == nil then LAWLYFISH.Rarities = {} end
 if LAWLYFISH.FishList == nil then LAWLYFISH.FishList = {} end
