@@ -8,6 +8,10 @@ function ENT:Initialize()
     self:SetUseType(SIMPLE_USE)
 end
 
+function ENT:OpenMenu(ply)
+    LAWLIB:OpenMenu("fishing_shop", ply, self)
+end
+
 function ENT:Use(ply)
-    LAWLIB:SendData("lawlib_openmenu", "fishing_shop", ply, self)
+    self:OpenMenu(ply)
 end

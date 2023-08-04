@@ -58,7 +58,7 @@ function MENU:SelectItem(index)
     end
 end
 
-function MENU:CreateMenu(ent, tbl)
+function MENU:CreateMenu(ent, tbl, cmd)
     MENU.Entity = ent
     MENU.Table = tbl
     PNL = vgui.Create("LFrame")
@@ -202,6 +202,9 @@ function MENU:CreateMenu(ent, tbl)
     PNL.ItemLengthBar:SetTall(10)
     PNL.ItemLengthBar:SetFGColor(Color(255,255,255))
     PNL.ItemLengthBar:SetVisible(false)
+
+    //Show buttons if the bucket is selected from the shop.
+    if cmd != "shopbuttons" then return end
 
 end
 

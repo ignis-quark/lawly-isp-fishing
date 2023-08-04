@@ -8,11 +8,6 @@ end
 
 ENT.TextColor = Color(255,255,255)
 
-function ENT:RequestItemList()
-    
-end
-
-
 function ENT:Draw()
     self:DrawModel()
     local pos = self:GetPos()

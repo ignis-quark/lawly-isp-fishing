@@ -28,10 +28,10 @@ function ENT:RemoveItem(itemnumber)
     self:SetItemCount(#self.StoredItems)
 end
 
+function ENT:OpenMenu(ply, cmd)
+    LAWLIB:OpenMenu("fishing_bucket", ply, self, self.StoredItems, cmd)
+end
+
 function ENT:Use(ply)
-    net.Start("lawlib_openmenu")
-        net.WriteString("fishing_bucket")
-        net.WriteEntity(self)
-        net.WriteTable(self.StoredItems)
-    net.Send(ply)
+    self:OpenMenu(ply)
 end
