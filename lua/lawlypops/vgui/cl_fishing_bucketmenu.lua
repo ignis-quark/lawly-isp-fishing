@@ -2,6 +2,8 @@ LAWLYFISH = LAWLYFISH or {}
 local MENU = {}
 local PNL = nil
 
+MENU.SelectedIndex = 0
+
 MENU.RequiresTable = true
 
 MENU.SortTypes = {
@@ -11,13 +13,90 @@ MENU.SortTypes = {
     {Name="LENGTH", func=function(tbl) table.SortByMember( tbl, "Length", false) end },
 }
 
+function MENU:SellItem(index)
+    table.remove(MENU.Table, index)
+    PNL.ItemList:PopulateList(MENU.Table)
+    self:SendSellToServer(2, index)
+end
+function MENU:SellTrash()
+    for i=#MENU.Table, 1, -1 do
+        local item = MENU.Table[i]
+        if item.IsTrash then
+            table.remove(MENU.Table, i)
+        end
+    end
+    PNL.ItemList:PopulateList(MENU.Table)
+    self:SendSellToServer(1)
+end
+function MENU:SellAll()
+    table.Empty(MENU.Table)
+    PNL.ItemList:PopulateList(MENU.Table)
+    self:SendSellToServer(0)
+end
+
+function MENU:SendSellToServer(cmd, index) --CMD: 0-All 1-Trash 2-Item
+    net.Start("lawly_fishing_sell_items")
+        net.WriteEntity(MENU.Entity)
+        net.WriteUInt(cmd, 2)
+        if cmd == 2 then
+            net.WriteUInt(index-1, 16)
+        end
+    net.SendToServer()
+end
+
+function MENU:ConfirmMenu(index)
+    local CMENU = vgui.Create("LConfirm")
+    if index == "all" then
+        CMENU:SetTitle("Sell ALL items? (" .. MENU.ItemTotal.Count .. " items)")
+        CMENU:SetTitleColor(Color(255,0,0))
+        CMENU.ConfirmAction = function()
+            MENU:SellAll()
+            MENU:Deselect()
+        end
+    elseif index == "trash" then
+        CMENU:SetTitle("Sell all trash? (" .. MENU.TrashTotal.Count .. " items)")
+        CMENU.ConfirmAction = function()
+            MENU:SellTrash()
+            MENU:Deselect()
+        end
+    else
+        CMENU:SetTitle("Sell the currently Selected Item?")
+        CMENU.ConfirmAction = function()
+            MENU:SellItem(index)
+            MENU:SelectItem(index)
+        end
+    end
+end
+
+function MENU:Deselect()
+    PNL.ModelView:SetVisible(false)
+    PNL.ItemRarity:SetVisible(false)
+    PNL.ItemPrice:SetVisible(false)
+    PNL.ItemLength:SetVisible(false)
+    PNL.ItemLengthBar:SetVisible(false)
+    PNL.ItemTitle:SetText("No Item Selected")
+    if PNL.SellMenu then
+        PNL.SellItemBtn:SetVisible(false)
+        PNL.SellMenu:InvalidateLayout()
+    end
+    self.SelectedIndex = 0
+end
+
 function MENU:SelectItem(index)
     if !PNL.ItemViewFrame then return end
     surface.PlaySound("items/pickup_quiet_0"..math.random(1,3)..".wav")
+    index = math.min(index, #self.Table)
+    self.SelectedIndex = index
     local tbl = MENU.Table[index]
+    if !tbl then MENU:Deselect() return end
     MsgN("Selecting item of index " .. index)
     MsgN("Table: ")
     PrintTable(tbl)
+    if PNL.SellMenu then
+        PNL.SellItemBtn:SetVisible(true)
+        PNL.SellTrashBtn:SetVisible(true)
+        PNL.SellAllBtn:SetVisible(true)
+    end
     
     local rarity = LAWLYFISH:GetRarity(tbl.Weight)
 
@@ -56,6 +135,14 @@ function MENU:SelectItem(index)
         PNL.ItemLength:SetVisible(false)
         PNL.ItemLengthBar:SetVisible(false)
     end
+end
+
+function MENU:FindShop()
+    for _, ent in ipairs(ents.FindInSphere(MENU.Entity:GetPos(), LAWLYFISH.SellDistance)) do
+        if ent:GetClass() != "lawly_tackle_shop" then continue end
+        return ent
+    end
+    return nil
 end
 
 function MENU:CreateMenu(ent, tbl, cmd)
@@ -100,7 +187,21 @@ function MENU:CreateMenu(ent, tbl, cmd)
     PNL.ItemList:SetPaintBackground(true)
     function PNL.ItemList:PopulateList(_tbl)
         self:Clear()
+        MENU.ItemTotal = {
+            Count = 0,
+            Worth = 0,
+            MostExpensive = 0
+        }
+        MENU.TrashTotal = {
+            Count = 0,
+            Worth = 0
+        }
+        if #_tbl == 0 and PNL.SellMenu then
+            PNL.SellTrashBtn:SetVisible(false)
+            PNL.SellAllBtn:SetVisible(false)
+        end
         for i, item in ipairs(_tbl) do
+            if item == nil then continue end
             local newItem = vgui.Create("DPanel")
             newItem:SetWide(PNL.ItemList:GetWide())
             newItem:SetTall(40)
@@ -122,6 +223,13 @@ function MENU:CreateMenu(ent, tbl, cmd)
             newItem.txt:CenterVertical()
 
             if item.Worth then
+                MENU.ItemTotal.Count = MENU.ItemTotal.Count + 1
+                MENU.ItemTotal.Worth = MENU.ItemTotal.Worth + item.Worth
+                if item.IsTrash then
+                    MENU.TrashTotal.Count = MENU.TrashTotal.Count + 1
+                    MENU.TrashTotal.Worth = MENU.TrashTotal.Worth + item.Worth
+                end
+                if item.Worth > MENU.ItemTotal.MostExpensive then MENU.ItemTotal.MostExpensive = item.Worth end
                 newItem.value = vgui.Create("DLabel", newItem)
                 newItem.value:SetText("$"..item.Worth)
                 newItem.value:SetFont("DermaLarge")
@@ -145,6 +253,7 @@ function MENU:CreateMenu(ent, tbl, cmd)
             end
             PNL.ItemList:Add(newItem)
         end
+        if PNL.SellMenu then PNL.SellMenu:UpdateTotals() end
     end
     PNL.ItemList:PopulateList(MENU.Table)
 
@@ -204,8 +313,77 @@ function MENU:CreateMenu(ent, tbl, cmd)
     PNL.ItemLengthBar:SetVisible(false)
 
     //Show buttons if the bucket is selected from the shop.
-    if cmd != "shopbuttons" then return end
+    local shop = self:FindShop()
+    if shop == nil or #MENU.Table == 0 then return end
 
+    PNL.SellMenu = vgui.Create("DPanel", PNL)
+    PNL.SellMenu:Dock(FILL)
+    PNL.SellMenu:DockPadding(10,0,10,0)
+    PNL.SellMenu:SetPaintBackground(false)
+
+    function PNL.SellMenu:UpdateTotals()
+        PNL.MostValText:SetText("Most expensive item: $" .. MENU.ItemTotal.MostExpensive)
+        PNL.TotalText:SetText(MENU.ItemTotal.Count .. " Items: $" .. MENU.ItemTotal.Worth)
+        PNL.TrashText:SetText(MENU.TrashTotal.Count .. " Trash: $" .. MENU.TrashTotal.Worth)
+    end
+
+    PNL.MostValText = vgui.Create("DLabel", PNL.SellMenu)
+    PNL.MostValText:Dock(TOP)
+    PNL.MostValText:SetText("Most expensive item: $" .. MENU.ItemTotal.MostExpensive)
+    PNL.MostValText:SetTextColor(Color(255,255,255))
+    PNL.MostValText:SetFont("DermaLarge")
+    PNL.MostValText:SizeToContentsY()
+    PNL.MostValText:DockMargin(0,0,0,10)
+
+    PNL.TotalText = vgui.Create("DLabel", PNL.SellMenu)
+    PNL.TotalText:Dock(TOP)
+    PNL.TotalText:SetText(MENU.ItemTotal.Count .. " Items: $" .. MENU.ItemTotal.Worth)
+    PNL.TotalText:SetTextColor(Color(255,109,109))
+    PNL.TotalText:SetFont("DermaLarge")
+    PNL.TotalText:SizeToContentsY()
+    PNL.TotalText:DockMargin(0,0,0,10)
+
+    PNL.TrashText = vgui.Create("DLabel", PNL.SellMenu)
+    PNL.TrashText:Dock(TOP)
+    PNL.TrashText:SetText(MENU.TrashTotal.Count .. " Trash: $" .. MENU.TrashTotal.Worth)
+    PNL.TrashText:SetFont("DermaLarge")
+    PNL.TrashText:SizeToContentsY()
+    PNL.TrashText:DockMargin(0,0,0,30)
+
+    PNL.SellItemBtn = vgui.Create("LButton", PNL.SellMenu)
+    PNL.SellItemBtn:DockMargin(20,10,20,10)
+    PNL.SellItemBtn:Dock(TOP)
+    PNL.SellItemBtn:SetText("Sell This Item")
+    PNL.SellItemBtn:SetFont("DermaLarge")
+    PNL.SellItemBtn:SetTextColor(Color(91,255,69))
+    PNL.SellItemBtn:SetTall(50)
+    function PNL.SellItemBtn:OnMousePressed()
+        MENU:ConfirmMenu(MENU.SelectedIndex)
+    end
+
+    PNL.SellTrashBtn = vgui.Create("LButton", PNL.SellMenu)
+    PNL.SellTrashBtn:DockMargin(20,10,20,10)
+    PNL.SellTrashBtn:Dock(TOP)
+    PNL.SellTrashBtn:SetText("Sell Trash Only")
+    PNL.SellTrashBtn:SetFont("DermaLarge")
+    PNL.SellTrashBtn:SetTextColor(Color(255,255,255))
+    PNL.SellTrashBtn:SetTall(50)
+    function PNL.SellTrashBtn:OnMousePressed()
+        MENU:ConfirmMenu("trash")
+    end
+
+    PNL.SellAllBtn = vgui.Create("LButton", PNL.SellMenu)
+    PNL.SellAllBtn:DockMargin(20,10,20,10)
+    PNL.SellAllBtn:Dock(TOP)
+    PNL.SellAllBtn:SetText("Sell All Items")
+    PNL.SellAllBtn:SetFont("DermaLarge")
+    PNL.SellAllBtn:SetTextColor(Color(255,0,0))
+    PNL.SellAllBtn:SetTall(50)
+    function PNL.SellAllBtn:OnMousePressed()
+        MENU:ConfirmMenu("all")
+    end
+
+    PNL.SellItemBtn:SetVisible(false)
 end
 
 LAWLIB:RegisterMenu("fishing_bucket", MENU)

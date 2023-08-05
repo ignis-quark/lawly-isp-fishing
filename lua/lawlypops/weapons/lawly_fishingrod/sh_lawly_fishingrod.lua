@@ -73,7 +73,7 @@ end
 
 function SWEP:GetBucket()
     for _, ent in ipairs(ents.FindInSphere(self:GetPos(), 150)) do
-        if ent:GetClass() != "lawly_fishing_bucket" then continue end
+        if ent:GetClass() != "lawly_fishing_bucket" or ent:GetItemCount() >= LAWLYFISH.BucketCapacity then continue end
         self.Bucket = ent
         return true
     end

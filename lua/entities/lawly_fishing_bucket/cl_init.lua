@@ -17,10 +17,20 @@ function ENT:Draw()
     ang:RotateAroundAxis(ang:Up(), -90)
     ang.y = LocalPlayer():EyeAngles().y - 90
     
+    local stored = self:GetItemCount()
+
     cam.Start3D2D(pos + self:GetUp() * 20, ang, 0.1)
-        surface.SetDrawColor(0,0,0, 200)
-        surface.DrawRect(-100,0,200,100)
-        draw.SimpleText("Stored Items:", "DermaDefault", 0, 0, self.TextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-        draw.SimpleText(self:GetItemCount(), "DermaDefault", 0, 20, self.TextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+        surface.SetDrawColor(0,0,0,230)
+        surface.DrawRect(-100,0,200,80)
+        draw.SimpleText("ITEMS:", "DermaLarge", 0, 0, self.TextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+        draw.SimpleText(self:GetItemCount().."/"..LAWLYFISH.BucketCapacity, "DermaLarge", 0, 30, self.TextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+        surface.SetDrawColor(0,0,0)
+        surface.DrawRect(-95,65,190,10)
+        if stored >= LAWLYFISH.BucketCapacity then
+            surface.SetDrawColor(90,0,0,200)
+        else
+            surface.SetDrawColor(0,100,0)
+        end
+        surface.DrawRect(-95,65,190 * math.Clamp(stored/LAWLYFISH.BucketCapacity, 0, 1),10)
     cam.End3D2D()
 end

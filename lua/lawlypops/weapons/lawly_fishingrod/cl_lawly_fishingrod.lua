@@ -10,7 +10,7 @@ SWEP.RedColor = Color(255,0,0)
 function SWEP:DrawHUD()
     draw.NoTexture()
     if !self:GetBucket() then
-        draw.SimpleTextOutlined("No bucket detected. Catch and Release only.", "DermaDefault", ScrW()/2 - 20, ScrH()/2, self.WhiteColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, self.RedColor)
+        draw.SimpleTextOutlined("No bucket with space available. Catch and Release only.", "DermaDefault", ScrW()/2 - 20, ScrH()/2, self.WhiteColor, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, self.RedColor)
     end
     if self:GetStartChargeTime() != 0 then
         local chargeRatio = math.Clamp((CurTime() - self:GetStartChargeTime()) / self.MaxChargeTime, 0, 1)

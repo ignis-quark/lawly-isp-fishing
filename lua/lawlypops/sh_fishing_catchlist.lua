@@ -56,7 +56,7 @@ LAWLYFISH.TrashList = {
     {Name="Radio",      Worth = 1, Mdl = "models/props_lab/reciever01a.mdl"},
     {Name="Sign",       Worth = 1, Mdl = "models/props_c17/streetsign001c.mdl"},
     {Name="Skull",      Worth = 1, Mdl = "models/Gibs/HGIBS.mdl"},
-    {Name="Tick Tack Toe Block", Worth = 1, Mdl = "models/props_c17/playgroundTick-tack-toe_block01a.mdl"},
+    {Name="Tic Tac Toe Block", Worth = 1, Mdl = "models/props_c17/playgroundTick-tack-toe_block01a.mdl"},
 }
 
 LAWLYFISH.WeaponList = {

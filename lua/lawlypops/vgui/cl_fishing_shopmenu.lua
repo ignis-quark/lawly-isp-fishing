@@ -1,7 +1,7 @@
 LAWLYFISH = LAWLYFISH or {}
 local MENU = {}
 local PNL = nil
-MENU.Ent = nil
+MENU.Entity = nil
 MENU.Buckets = {}
 MENU.BucketSelection = 0
 
@@ -23,7 +23,7 @@ MENU.ShopMonologue = {
 
 function MENU:FindBucket()
     table.Empty(MENU.Buckets)
-    for _, ent in ipairs(ents.FindInSphere(MENU.Ent:GetPos(), 200)) do
+    for _, ent in ipairs(ents.FindInSphere(MENU.Entity:GetPos(), LAWLYFISH.SellDistance)) do
         if ent:GetClass() != "lawly_fishing_bucket" then continue end
         table.insert(MENU.Buckets, ent)
         if #MENU.Buckets >= 99 then break end
@@ -32,7 +32,7 @@ function MENU:FindBucket()
 end
 
 function MENU:CreateMenu(ent)
-    MENU.Ent = ent
+    MENU.Entity = ent
 
     PNL = vgui.Create("LFrame")
     PNL:SetTitle("Bait and Tackle Shop")

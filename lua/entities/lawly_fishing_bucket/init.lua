@@ -8,8 +8,51 @@ function ENT:Initialize()
     self:SetUseType(SIMPLE_USE)
 end
 
+function ENT:GivePlyMoney(ply, amount)
+    self:SetItemCount(#self.StoredItems)
+    if DarkRP then
+        DarkRP.notify(ply, NOTIFY_GENERIC, 3, "Recieved " .. DarkRP.formatMoney(amount) .. " for fishing items.")
+        ply:addMoney(amount)
+    end
+    MsgN(ply:Nick(), " sold fishing items for $", amount)
+end
+
+function ENT:SellAll(ply)
+    local totalMoney = 0
+    for _, item in ipairs(self.StoredItems) do
+        if !item.Worth then continue end
+        totalMoney = totalMoney + item.Worth
+    end
+    table.Empty(self.StoredItems)
+    self:GivePlyMoney(ply, totalMoney)
+end
+
+function ENT:SellTrashOnly(ply)
+    local totalMoney = 0
+    for i=#self.StoredItems, 1, -1 do
+        local item = self.StoredItems[i]
+        if item.IsTrash then
+            table.remove(self.StoredItems, i)
+            if item.Worth then
+                totalMoney = totalMoney + item.Worth
+            end
+        end
+    end
+    self:GivePlyMoney(ply, totalMoney)
+end
+
+function ENT:SellItem(ply, index)
+    local totalMoney = 0
+    local item = self.StoredItems[index]
+    if item.Worth then
+        totalMoney = item.Worth
+    end
+    table.remove(self.StoredItems, index)
+    self:GivePlyMoney(ply, totalMoney)
+end
+
 function ENT:AddItem(ent)
-    if !ent then MsgN("A") return end
+    if !ent or #self.StoredItems >= LAWLYFISH.BucketCapacity then return end
     tbl = ent
     if IsEntity(ent) then
         tbl = table.Copy(ent.ItemTable)

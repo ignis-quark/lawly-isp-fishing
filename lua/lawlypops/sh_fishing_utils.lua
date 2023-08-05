@@ -39,7 +39,7 @@ end
 function LAWLYFISH:GetRandomItem(seed)
     local Catch = LAWLYFISH:GetRandomCatch()
     local Item = table.Copy(LAWLYFISH:SelectFromList(Catch.List))
-
+    if Catch.List == LAWLYFISH.TrashList then Item.IsTrash = true end
     LAWLYFISH:SelectRandomStats(Item, seed)
     return Item
 end
@@ -142,6 +142,7 @@ concommand.Add("fishing_debug_bucket", function(ply, cmd, args)
     if args[1] == "1" then
         for i, category in ipairs(LAWLYFISH.Catches) do
             for _i, item in ipairs(category.List) do
+                if category.List == LAWLYFISH.TrashList then item.IsTrash = true end
                 LAWLYFISH:SelectRandomStats(item, _i)
                 bucket:AddItem(item)
             end
