@@ -39,17 +39,20 @@ end
 function LAWLYFISH:GetRandomItem(seed)
     local Catch = LAWLYFISH:GetRandomCatch()
     local Item = table.Copy(LAWLYFISH:SelectFromList(Catch.List))
-    if Catch.List == LAWLYFISH.TrashList then Item.IsTrash = true end
+    if Catch.List == LAWLYFISH.TrashList then
+        Item.IsTrash = true
+        Item.Worth = 1
+    end
     LAWLYFISH:SelectRandomStats(Item, seed)
     return Item
 end
 
 function LAWLYFISH:SelectRandomStats(item, seed)
     if seed == nil then seed = CurTime() end
-    if item.Lengths then
+    if item.MaxLength then
         local randVal = util.SharedRandom(seed, 0, 1)
         item.RandVal = randVal
-        item.Length = Lerp(randVal, item.Lengths[1], item.Lengths[2])
+        item.Length = Lerp(randVal, LAWLYFISH.MinLength, item.MaxLength)
 
         if item.Worth > 0 then
             item.Worth = item.Worth - math.floor((1-randVal) * item.Worth * LAWLYFISH.LengthCostMod)

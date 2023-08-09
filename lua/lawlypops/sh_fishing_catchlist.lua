@@ -1,9 +1,10 @@
 LAWLYFISH = LAWLYFISH or {}
 
 --Lengths, in CM, min and max
+--[[
 LAWLYFISH.FishList = {
-    {Name="Anabas",         Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Anchovy",        Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
+    {Name="Anabas",         Weight = 90,  Worth = 40, Lengths = {15, 30}, Mdl = "FUCK" },
+    {Name="Anchovy",        Weight = 90,  Worth = 35, Lengths = {2, 40}, Mdl = "FUCK" },
     {Name="Angelfish",      Weight = 80,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
     {Name="Arowana",        Weight = 80,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
     {Name="Atlantic Bluefin Tuna", Weight = 0.1, Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
@@ -14,7 +15,6 @@ LAWLYFISH.FishList = {
     {Name="Blue Tang",      Weight = 50,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
     {Name="Bluegill",       Weight = 7,   Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
     {Name="Carp",           Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Catfish",        Weight = 75,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
     {Name="Clownfish",      Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
     {Name="Garfish",        Weight = 40,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
     {Name="Gilt-Head Bream",Weight = 20,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
@@ -33,30 +33,83 @@ LAWLYFISH.FishList = {
     {Name="Snapper",        Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
     {Name="Swordfish",      Weight = 3,   Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
     {Name="Tilapia",        Weight = 70,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="White Bass",     Weight = 14,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
     {Name="Zander",         Weight = 2,   Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
     {Name="Zebrafish",      Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
+}
+--]]
+LAWLYFISH.FishList = {
+    --Common (90)
+    {Name="Anchovy",        Weight = 90,  Worth = 10, MaxLength = 25, Mdl = "FUCK" },
+    {Name="Atlantic Mackerel",Weight=90,  Worth = 25, MaxLength = 66, Mdl = "FUCK" },
+    {Name="Wells Catfish",  Weight = 90,  Worth = 20, MaxLength = 120,Mdl = "FUCK" },
+    {Name="Common Tench",   Weight = 90,  Worth = 20, MaxLength = 70, Mdl = "FUCK" },
+    {Name="Mottled Eel",    Weight = 90,  Worth = 10, MaxLength = 121,Mdl = "FUCK" },
+    {Name="Sardine",        Weight = 90,  Worth = 5,  MaxLength = 40, Mdl = "FUCK" },
+    {Name="Pink Shrimp",    Weight = 90,  Worth = 3,  MaxLength = 3,  Mdl = "FUCK" },
+    {Name="Tiger Prawn",    Weight = 90,  Worth = 3,  MaxLength = 3,  Mdl = "FUCK" },
+    {Name="Smallmouth Bass",Weight = 90,  Worth = 20, MaxLength = 65, Mdl = "FUCK" },
+    {Name="River Trout",    Weight = 90,  Worth = 25, MaxLength = 80, Mdl = "FUCK" },
+    {Name="Sea Trout",      Weight = 90,  Worth = 30, MaxLength = 90, Mdl = "FUCK" },
+    {Name="White Bass",     Weight = 90,  Worth = 20, MaxLength = 70, Mdl = "FUCK" },
+    --Uncommon (80)
+    {Name="Bluegill",       Weight = 85,  Worth = 35, MaxLength = 30, Mdl = "FUCK" },
+    {Name="Cod",            Weight = 85,  Worth = 40, MaxLength = 200,Mdl = "FUCK" },
+    {Name="Salmon",         Weight = 85,  Worth = 35, MaxLength = 76, Mdl = "FUCK" },
+    {Name="Brook Trout",    Weight = 80,  Worth = 40, MaxLength = 90, Mdl = "FUCK" },
+    {Name="Albacore Tuna",  Weight = 80,  Worth = 30, MaxLength = 140,Mdl = "FUCK" },
+    {Name="Sea Turtle",     Weight = 80,  Worth = 40, MaxLength = 120,Mdl = "FUCK" },
+    {Name="Slimy Eel",      Weight = 80,  Worth = 40, MaxLength = 127,Mdl = "FUCK" },
+    --Rare (60)
+    {Name="Herring",        Weight = 70,  Worth = 40, MaxLength = 45, Mdl = "FUCK" },
+    {Name="Pike",           Weight = 70,  Worth = 55, MaxLength = 150,Mdl = "FUCK" },
+    {Name="Lobster",        Weight = 60,  Worth = 40, MaxLength = 60, Mdl = "FUCK" },
+    {Name="Rainbow Fish",   Weight = 60,  Worth = 40, MaxLength = 10, Mdl = "FUCK" },
+    --Very Rare (40)
+    {Name="Boxer Shrimp",   Weight = 45,  Worth = 10, MaxLength = 4,  Mdl = "FUCK" },
+    {Name="Leaping Sturgeon",Weight= 50,  Worth = 50, MaxLength = 720,Mdl = "FUCK" },
+    {Name="Largemouth Bass",Weight = 40,  Worth = 55, MaxLength = 75, Mdl = "FUCK" },
+    {Name="Leaping Trout",  Weight = 40,  Worth = 50, MaxLength = 80, Mdl = "FUCK" },
+    {Name="Leaping Salmon", Weight = 40,  Worth = 50, MaxLength = 150,Mdl = "FUCK" },
+    --Epic (10)
+    {Name="Cave Eel",       Weight = 25,  Worth = 60, MaxLength = 400,Mdl = "FUCK" },
+    {Name="Greater Siren",  Weight = 15,  Worth = 80, MaxLength = 97, Mdl = "FUCK" },
+    {Name="Monkfish",       Weight = 10,  Worth = 80, MaxLength = 150,Mdl = "FUCK" },
+    {Name="Swordfish",      Weight = 10,  Worth = 110,MaxLength = 455,Mdl = "FUCK" },
+    {Name="Karambwan",      Weight = 10,  Worth = 150,MaxLength = 20, Mdl = "FUCK" },
+    --Mythical (1)
+    {Name="Atlantic Bluefin Tuna",Weight=8,Worth= 200,MaxLength = 460,Mdl = "FUCK" },
+    {Name="King Mackerel",  Weight = 7,  Worth = 200, MaxLength = 184,Mdl = "FUCK" },
+    {Name="Shark",          Weight = 5,  Worth = 250, MaxLength = 67, Mdl = "FUCK" },
+    {Name="Dark Crab",      Weight = 1,  Worth = 500, MaxLength = 400,Mdl = "FUCK" },
+    {Name="Manta Ray",      Weight = 1,  Worth = 800, MaxLength = 700,Mdl = "FUCK" },
+    {Name="Pufferfish",     Weight = 1,  Worth = 300, MaxLength = 120,Mdl = "FUCK" },
+    {Name="Lau Lau",        Weight = 1,  Worth = 400, MaxLength = 280,Mdl = "FUCK" },
+    --Relic (0.1)
+    {Name="Anglerfish",     Weight = 0.1,Worth = 1240, MaxLength = 150,Mdl = "FUCK" },
+    {Name="Golden Trout",   Weight = 0.1,Worth = 1300, MaxLength = 30, Mdl = "FUCK" },
+    {Name="Holy Mackerel",  Weight = 0.1,Worth = 2520, MaxLength = 250,Mdl = "FUCK" },
+    {Name="Southern Bluefin Tuna",Weight = 0.1,  Worth = 2820, MaxLength = 245,Mdl = "FUCK" },
 }
 LAWLYFISH:ApplyWeights(LAWLYFISH.FishList)
 
 LAWLYFISH.TrashList = {
-    {Name="Baby",       Worth = 1, Mdl = "models/props_c17/doll01.mdl"},
-    {Name="Bleach",     Worth = 1, Mdl = "models/props_junk/garbage_plasticbottle001a.mdl"},
-    {Name="Bone",       Worth = 1, Mdl = "models/Gibs/HGIBS_rib.mdl"},
-    {Name="Boot",       Worth = 1, Mdl = "models/props_junk/Shoe001a.mdl"},
-    {Name="Bottle",     Worth = 1, Mdl = "models/props_junk/garbage_plasticbottle003a.mdl"},
-    {Name="Can",        Worth = 1, Mdl = "models/props_junk/PopCan01a.mdl"},
-    {Name="Chinese Food", Worth = 1, Mdl = "models/props_junk/garbage_takeoutcarton001a.mdl"},
-    {Name="Clock",      Worth = 1, Mdl = "models/props_c17/clock01.mdl"},
-    {Name="Cone",       Worth = 1, Mdl = "models/props_junk/TrafficCone001a.mdl"},
-    {Name="HulaDoll",   Worth = 1, Mdl = "models/props_lab/huladoll.mdl"},
-    {Name="Keyboard",   Worth = 1, Mdl = "models/props_c17/computer01_keyboard.mdl"},
-    {Name="Lamp",       Worth = 1, Mdl = "models/props_lab/desklamp01.mdl"},
-    {Name="Melon",      Worth = 1, Mdl = "models/props_junk/watermelon01.mdl"},
-    {Name="Radio",      Worth = 1, Mdl = "models/props_lab/reciever01a.mdl"},
-    {Name="Sign",       Worth = 1, Mdl = "models/props_c17/streetsign001c.mdl"},
-    {Name="Skull",      Worth = 1, Mdl = "models/Gibs/HGIBS.mdl"},
-    {Name="Tic Tac Toe Block", Worth = 1, Mdl = "models/props_c17/playgroundTick-tack-toe_block01a.mdl"},
+    {Name="Baby",       Mdl = "models/props_c17/doll01.mdl"},
+    {Name="Bleach",     Mdl = "models/props_junk/garbage_plasticbottle001a.mdl"},
+    {Name="Bone",       Mdl = "models/Gibs/HGIBS_rib.mdl"},
+    {Name="Boot",       Mdl = "models/props_junk/Shoe001a.mdl"},
+    {Name="Bottle",     Mdl = "models/props_junk/garbage_plasticbottle003a.mdl"},
+    {Name="Can",        Mdl = "models/props_junk/PopCan01a.mdl"},
+    {Name="Takeout Box",Mdl = "models/props_junk/garbage_takeoutcarton001a.mdl"},
+    {Name="Clock",      Mdl = "models/props_c17/clock01.mdl"},
+    {Name="Cone",       Mdl = "models/props_junk/TrafficCone001a.mdl"},
+    {Name="HulaDoll",   Mdl = "models/props_lab/huladoll.mdl"},
+    {Name="Keyboard",   Mdl = "models/props_c17/computer01_keyboard.mdl"},
+    {Name="Lamp",       Mdl = "models/props_lab/desklamp01.mdl"},
+    {Name="Melon",      Mdl = "models/props_junk/watermelon01.mdl"},
+    {Name="Radio",      Mdl = "models/props_lab/reciever01a.mdl"},
+    {Name="Sign",       Mdl = "models/props_c17/streetsign001c.mdl"},
+    {Name="Skull",      Mdl = "models/Gibs/HGIBS.mdl"},
+    {Name="Tic Tac Toe Block",Mdl = "models/props_c17/playgroundTick-tack-toe_block01a.mdl"},
 }
 
 LAWLYFISH.WeaponList = {
@@ -65,9 +118,26 @@ LAWLYFISH.WeaponList = {
 LAWLYFISH:ApplyWeights(LAWLYFISH.WeaponList)
 
 LAWLYFISH.UsableList = {
-    {Name="Fridge", Worth = 1, Class = "FUCK"},
-    {Name="Oven",   Worth = 1, Class = "FUCK"},
-    {Name="Pot",    Worth = 1, Class = "FUCK"},
+    {Name="Fridge", Worth = 100, Class = "FUCK"},
+    {Name="Oven",   Worth = 100, Class = "FUCK"},
+    {Name="Pot",    Worth = 10, Class = "FUCK"},
+    {Name="Pan",    Worth = 10, Class = "FUCK"},
+}
+
+LAWLYFISH.PlushieList = {
+    {Name="Alien", Mdl = "WIP"},
+    {Name="Browny Electro", Mdl = "WIP"},
+    {Name="Crimson Peak", Mdl = "WIP"},
+    {Name="Kiwi", Mdl = "WIP"},
+    {Name="Dawny", Mdl = "WIP"},
+    {Name="Gorloss", Mdl = "WIP"},
+    {Name="Kale Triton", Mdl = "WIP"},
+    {Name="Luna", Mdl = "WIP"},
+    {Name="Midnight Rain", Mdl = "WIP"},
+    {Name="Mitten Kitten", Mdl = "WIP"},
+    {Name="Ruby Madness", Mdl = "WIP"},
+    {Name="Sora Kite", Mdl = "WIP"},
+    {Name="Zeime", Mdl = "WIP"},
 }
 
 LAWLYFISH.Catches = {
