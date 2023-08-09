@@ -52,7 +52,7 @@ function SWEP:ThrowLine()
         self:SetBobber(self.Bobber)
         local plyMdl = self.Owner:GetModel()
         local handBone = self.Owner:LookupBone("ValveBiped.Bip01_R_Hand")
-        if ply.IsPony and ply:IsPony() then
+        if self.Owner.IsPony and self.Owner:IsPony() then
             handBone = self.Owner:LookupBone("Lrig_LEG_FL_FrontHoof")
         end
         if !handBone then handBone = 0 end
