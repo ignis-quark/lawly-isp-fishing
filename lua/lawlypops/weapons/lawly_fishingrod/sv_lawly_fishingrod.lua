@@ -74,8 +74,10 @@ function SWEP:ReturnLine()
     self:EmitSound(self:SpoolSoundRandom())
     self.LineStatus = "PullingIn"
     if IsValid(self.Bobber) then 
+        self.Bobber:SetPos(self.Bobber:GetPos() + Vector(0,0,20))
         self.Bobber:GetPhysicsObject():SetDragCoefficient(1)
-        self.Bobber:GetPhysicsObject():SetVelocity((self.BobberOffset + Vector(0,0,self.BobberDist/3))*2)
+        local heightpulloffset = self.BobberDist / (self.BobberDist/450) --Try and account for distance and strength
+        self.Bobber:GetPhysicsObject():SetVelocity((self.BobberOffset + Vector(0,0,heightpulloffset)))
     end
     self.BobberPlaceTime = 0
     self.ChargeTime = 0
