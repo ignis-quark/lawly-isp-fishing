@@ -171,6 +171,7 @@ end
 
 function SWEP:Holster()
     self:ReturnLine()
+    return true
 end
 
 function SWEP:DoInput()
