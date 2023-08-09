@@ -169,7 +169,9 @@ function SWEP:Think()
     self:DoCatchTimer()
 end
 
-
+function SWEP:Holster()
+    self:ReturnLine()
+end
 
 function SWEP:DoInput()
     local MousePress = self.Owner:KeyPressed(IN_ATTACK)
