@@ -170,7 +170,7 @@ function SWEP:Think()
 end
 
 function SWEP:Holster()
-    self:ReturnLine()
+    self:RemoveBobber()
     return true
 end
 
