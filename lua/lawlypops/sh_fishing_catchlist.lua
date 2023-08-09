@@ -90,7 +90,7 @@ LAWLYFISH.FishList = {
     {Name="Holy Mackerel",  Weight = 0.1,Worth = 2520, MaxLength = 250,Mdl = "FUCK" },
     {Name="Southern Bluefin Tuna",Weight = 0.1,  Worth = 2820, MaxLength = 245,Mdl = "FUCK" },
 }
-LAWLYFISH:ApplyWeights(LAWLYFISH.FishList)
+LAWLIB:TableApplyWeights(LAWLYFISH.FishList)
 
 LAWLYFISH.TrashList = {
     {Name="Baby",       Mdl = "models/props_c17/doll01.mdl"},
@@ -115,7 +115,7 @@ LAWLYFISH.TrashList = {
 LAWLYFISH.WeaponList = {
     {Name="Pistol", Weight = 1, Wep = "weapon_pistol"}
 }
-LAWLYFISH:ApplyWeights(LAWLYFISH.WeaponList)
+LAWLIB:TableApplyWeights(LAWLYFISH.WeaponList)
 
 LAWLYFISH.UsableList = {
     {Name="Fridge", Worth = 100, Class = "FUCK"},
@@ -146,7 +146,7 @@ LAWLYFISH.Catches = {
     {List = LAWLYFISH.WeaponList, Weight = 1},
     {List = LAWLYFISH.UsableList, Weight = 5},
 }
-LAWLYFISH:ApplyWeights(LAWLYFISH.Catches)
+LAWLIB:TableApplyWeights(LAWLYFISH.Catches)
 
 LAWLYFISH.Rarities = {
     {Color=Color(255,255,255), Weight = 100, Name="Worthless"},
@@ -159,4 +159,4 @@ LAWLYFISH.Rarities = {
     {Color=Color(0,247,255), Weight = 0.1, Name="Relic"},
     {Color=Color(255,200,0), Weight = 0.01, Name="Eternal"}
 }
-LAWLYFISH:ApplyWeights(LAWLYFISH.Rarities)
+LAWLIB:TableApplyWeights(LAWLYFISH.Rarities)

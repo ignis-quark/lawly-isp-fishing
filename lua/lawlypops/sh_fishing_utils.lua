@@ -4,41 +4,15 @@ if LAWLYFISH.Catches == nil then LAWLYFISH.Catches = {} end
 if LAWLYFISH.Rarities == nil then LAWLYFISH.Rarities = {} end
 if LAWLYFISH.FishList == nil then LAWLYFISH.FishList = {} end
 
-//Functions for fancy stuff :3
-function LAWLYFISH:ApplyWeights(tbl)
-    local total = 0
-    for i, item in ipairs(tbl) do
-        total = total + item.Weight
-    end
-    tbl.TotalWeight = total
-end
-
-
-function LAWLYFISH:SelectFromList(tbl)
-    if !tbl.TotalWeight then
-        if table.IsSequential(tbl) then
-            return tbl[math.random(#tbl)]
-        end
-        return table.Random(tbl)
-    end
-    local rnd = math.random() * tbl.TotalWeight
-    for i, item in ipairs(tbl) do
-        rnd = rnd - item.Weight
-        if rnd < 0 then
-            return item
-        end
-    end
-end
-
 --Returns one of the lists of possible catch types
 function LAWLYFISH:GetRandomCatch()
-    return LAWLYFISH:SelectFromList(LAWLYFISH.Catches)
+    return LAWLIB:TableWeightedSelect(LAWLYFISH.Catches)
 end
 
 --Returns the actual caught item
 function LAWLYFISH:GetRandomItem(seed)
     local Catch = LAWLYFISH:GetRandomCatch()
-    local Item = table.Copy(LAWLYFISH:SelectFromList(Catch.List))
+    local Item = table.Copy(LAWLIB:TableWeightedSelect(Catch.List))
     if Catch.List == LAWLYFISH.TrashList then
         Item.IsTrash = true
         Item.Worth = 1
