@@ -50,8 +50,12 @@ function SWEP:ThrowLine()
         self.Bobber:GetPhysicsObject():SetBuoyancyRatio(0.7)
         self.BobberMass = self.Bobber:GetPhysicsObject():GetMass()
         self:SetBobber(self.Bobber)
-
+        local plyMdl = self.Owner:GetModel()
         local handBone = self.Owner:LookupBone("ValveBiped.Bip01_R_Hand")
+        if ply.IsPony and ply:IsPony() then
+            handBone = self.Owner:LookupBone("Lrig_LEG_FL_FrontHoof")
+        end
+        if !handBone then handBone = 0 end
         self.Line = constraint.CreateKeyframeRope( self:GetPos(), 1, "cable/cable2", nil, self.Owner, self.Owner:WorldToLocal(self.Owner:GetBonePosition(handBone)), handBone, self.Bobber, Vector(0,0,0), 0)
     end
 end
