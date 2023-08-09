@@ -221,5 +221,5 @@ function SWEP:NibbleLine()
     local effectdata = EffectData()
     effectdata:SetOrigin( self.Bobber:GetPos() )
     effectdata:SetScale(5)
-    util.Effect( "gunshotsplash", effectdata )
+    util.Effect( "gunshotsplash", effectdata, true, true )
 end
