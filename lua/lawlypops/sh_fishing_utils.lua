@@ -54,17 +54,6 @@ function LAWLYFISH:CreateRandomItemEnt(pos)
     item:SetItem(LAWLYFISH:GetRandomItem())
     return item
 end
---[[ Only shows items from the basic fish list currently.
-concommand.Add("fishing_listweights", function()
-    local tbl = LAWLYFISH.FishList
-    for i, item in ipairs(tbl) do
-        local wt = item.Weight
-        local perc = (wt / tbl.TotalWeight) * 100
-        MsgN("List of all fishing weights available:")
-        MsgN("[", item.Name, "] ", wt, " | ", perc, "%")
-    end
-end)
---]]
 
 concommand.Add("fishing_debug_catch", function(ply, cmd, args)
     local counter = 100

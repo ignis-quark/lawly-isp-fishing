@@ -7,13 +7,6 @@ local smoothApproachY = 0
 SWEP.WhiteColor = Color(255,255,255)
 SWEP.RedColor = Color(255,0,0)
 
-function SWEP:PrimaryAttack()
-    return false
-end
-
-function SWEP:SecondaryAttack()
-    return false
-end
 
 function SWEP:DrawHUD()
     draw.NoTexture()

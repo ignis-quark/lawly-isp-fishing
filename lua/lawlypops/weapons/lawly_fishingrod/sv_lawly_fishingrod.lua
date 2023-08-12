@@ -1,12 +1,4 @@
 
-function SWEP:PrimaryAttack()
-    return false
-end
-
-function SWEP:SecondaryAttack()
-    //if self.LineStatus == "Out" then self:TugLine() end
-end
-
 function SWEP:TugLine()
     self:Debug("Tugging")
     if !IsValid(self.Bobber) then self:RemoveBobber() return end
@@ -37,6 +29,8 @@ function SWEP:ThrowLine()
 
     local ply = self.Owner
     self:EmitSound(self.ThrowSound)
+	self:SendWeaponAnim( ACT_VM_MISSCENTER )
+
 
     local throwSpeed = self.ThrowStrength * self.ChargeTime
 
@@ -72,6 +66,8 @@ end
 
 function SWEP:ReturnLine()
     self:EmitSound(self:SpoolSoundRandom())
+	self:SendWeaponAnim( ACT_VM_HITCENTER )
+
     self.LineStatus = "PullingIn"
     if IsValid(self.Bobber) then 
         self.Bobber:SetPos(self.Bobber:GetPos() + Vector(0,0,20))

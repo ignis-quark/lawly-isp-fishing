@@ -89,9 +89,6 @@ function MENU:SelectItem(index)
     self.SelectedIndex = index
     local tbl = MENU.Table[index]
     if !tbl then MENU:Deselect() return end
-    MsgN("Selecting item of index " .. index)
-    MsgN("Table: ")
-    PrintTable(tbl)
     if PNL.SellMenu then
         PNL.SellItemBtn:SetVisible(true)
         PNL.SellTrashBtn:SetVisible(true)

@@ -3,6 +3,10 @@ SWEP.Category = "Fishing"
 SWEP.Author = "Lawlypops"
 SWEP.Spawnable = true
 
+SWEP.ViewModel = "models/weapons/c_fishing_rod.mdl"
+SWEP.ViewModelFOV = 70
+SWEP.UseHands = true
+
 SWEP.Primary.ClipSize		= -1
 SWEP.Primary.DefaultClip	= -1
 SWEP.Primary.Automatic		= false
@@ -53,6 +57,26 @@ SWEP.RemoveBobberTime = 2
 SWEP.Bucket = nil
 
 SWEP.DebugMode = true
+
+function SWEP:Idle()
+
+	-- Update idle anim
+	local curtime = CurTime()
+
+	if ( curtime < self:GetNextIdle() ) then return false end
+
+	self:SendWeaponAnim( ACT_VM_IDLE )
+	self:SetNextIdle( curtime + self:SequenceDuration() )
+
+	return true
+
+end
+
+function SWEP:Deploy()
+    self:SetDeploySpeed(0.5)
+    self:SendWeaponAnim( ACT_VM_DEPLOY )
+
+end
 
 function SWEP:Debug(text)
     if !self.DebugMode then return end

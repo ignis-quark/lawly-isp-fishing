@@ -13,7 +13,6 @@ function ENT:SetItem(item)
         self.WeaponClass = self.ItemTable.Class
     end
     if self.ItemTable.Mdl then
-        MsgN(self.ItemTable.Mdl)
         self:SetModel(self.ItemTable.Mdl)
     else
         self:SetModel(self.BoxModel)
