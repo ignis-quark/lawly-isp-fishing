@@ -11,10 +11,11 @@ end
 function ENT:GivePlyMoney(ply, amount)
     self:SetItemCount(#self.StoredItems)
     if DarkRP then
-        DarkRP.notify(ply, NOTIFY_GENERIC, 3, "Recieved " .. DarkRP.formatMoney(amount) .. " for fishing items.")
         ply:addMoney(amount)
+        amount = DarkRP.formatMoney(amount)
     end
-    MsgN(ply:Nick(), " sold fishing items for $", amount)
+    MsgN(ply:Nick(), " sold fishing items for ", amount)
+    LAWLIB:Notify(ply, "Recieved " .. amount .. " for fishing items.")
 end
 
 function ENT:SellAll(ply)

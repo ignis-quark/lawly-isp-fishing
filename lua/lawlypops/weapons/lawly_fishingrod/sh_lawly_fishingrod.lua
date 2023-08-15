@@ -3,7 +3,7 @@ SWEP.Category = "Fishing"
 SWEP.Author = "Lawlypops"
 SWEP.Spawnable = true
 
-SWEP.ViewModel = "models/weapons/c_fishing_rod.mdl"
+SWEP.ViewModel = "models/weapons/lawlypops/c_fishing_rod.mdl"
 SWEP.ViewModelFOV = 70
 SWEP.UseHands = true
 
@@ -26,8 +26,9 @@ SWEP.DrawCrosshair		= false
 
 SWEP.ThrowSound = Sound("weapons/tripwire/ropeshoot.wav")
 SWEP.TaughtSound = Sound("physics/wood/wood_strain7.wav")
-SWEP.SpoolSound = Sound("physics/wood/wood_strain6.wav")
-SWEP.JumpscareSound = Sound("npc/stalker/go_alert2.wav")
+SWEP.SpoolSounds = {
+    Sound("physics/wood/wood_strain6.wav")
+}
 
 SWEP.LineStatus = "In" // In, Out, ThrowingOut, PullingIn, ItemHooked
 SWEP.Catch = nil
@@ -56,7 +57,7 @@ SWEP.RemoveBobberTime = 2
 
 SWEP.Bucket = nil
 
-SWEP.DebugMode = true
+SWEP.DebugMode = false
 
 function SWEP:Idle()
 
@@ -85,9 +86,7 @@ end
 
 -- :)
 function SWEP:SpoolSoundRandom()
-    local rnd = math.random(0,1000)
-    if rnd <= 1 then return self.JumpscareSound end
-    return self.SpoolSound
+    return self.SpoolSounds[math.random(#self.SpoolSounds)]
 end
 
 function SWEP:SetupDataTables()

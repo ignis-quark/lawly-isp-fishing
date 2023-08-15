@@ -10,19 +10,6 @@ function SWEP:TugLine()
     self:ReturnLine()
 end
 
---[[ Will be used when more sophisticated catch method is implemented.
-function SWEP:TugLine()
-    if !IsValid(self.Bobber) then self:RemoveBobber() return end
-    local offset = self.BobberOffset
-    offset:Normalize()
-    self.Bobber:GetPhysicsObject():ApplyForceCenter(offset * 40 * self.BobberMass)
-    if self.LastNibble + self.NibblePullWindow < CurTime() then return end
-    self.LineStatus = "ItemHooked"
-    self.HookedItem = LAWLYFISH:CreateRandomItemEnt(self.Bobber:GetPos())
-    self.HookedItem:SetParent(self.Bobber)
-    MsgN("CAUGHT SOMETHING!")
-end
---]]
 function SWEP:ThrowLine()
     self.LineStatus = "ThrowingOut"
     self.BobberPlaceTime = CurTime()
