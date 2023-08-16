@@ -1,4 +1,5 @@
 
+--Attempt to catch a fish.
 function SWEP:TugLine()
     self:Debug("Tugging")
     if !IsValid(self.Bobber) then self:RemoveBobber() return end
@@ -19,7 +20,7 @@ function SWEP:ThrowLine()
 	self:SendWeaponAnim( ACT_VM_MISSCENTER )
 
 
-    local throwSpeed = self.ThrowStrength * self.ChargeTime
+    local throwSpeed = self.ThrowStrength * (self.ChargeTime/self.MaxChargeTime)
 
     if SERVER then
         self:Debug("Creating Bobber")
@@ -41,6 +42,7 @@ function SWEP:ThrowLine()
     end
 end
 
+--Slowly pull the line towards the player
 function SWEP:PullLine()
     if !IsValid(self.Bobber) then self:RemoveBobber() return end
     local offset = self.BobberOffset
@@ -51,6 +53,7 @@ function SWEP:PullLine()
     if horizontalDist < 100 then self:ReturnLine() return end
 end
 
+--Return the bobber entirely
 function SWEP:ReturnLine()
     self:EmitSound(self:SpoolSoundRandom())
 	self:SendWeaponAnim( ACT_VM_HITCENTER )
@@ -80,16 +83,9 @@ function SWEP:RemoveBobber()
     self.Bobber:Remove()
 end
 
-function SWEP:FishPullLine()
-    if !IsValid(self.Bobber) then self:RemoveBobber() return end
-    local pullDir = self.Bobber:GetPos() - self.Owner:GetPos()
-    pullDir:Normalize()
-    pullDir = pullDir / 2 * VectorRand(0,300)
-    pullDir.z = math.Clamp(pullDir.z, -200, 0)
-    self.Bobber:GetPhysicsObject():ApplyForceCenter( pullDir )
-end
 
-SWEP.WaitingForReturn = false
+--How long after the bobber is pulled out of water it will return.
+SWEP.BobberEscapeDelay = 3
 
 function SWEP:Think()
     self:DoInput()
@@ -105,12 +101,9 @@ function SWEP:Think()
         end
     end
 
-    if self.LineStatus == "ItemHooked" then
-        self:FishPullLine()
-    end
-
     if self.LineStatus == "Out" then
-        if self.Bobber.IsInWater then
+        if self.Bobber.InWaterTime != 0 and self.Bobber.InWaterTime < CurTime() - self.BobberEscapeDelay then
+            self:ReturnLine()
         end
     end
 

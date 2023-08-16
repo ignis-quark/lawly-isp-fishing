@@ -1,42 +1,5 @@
 LAWLYFISH = LAWLYFISH or {}
 
---Lengths, in CM, min and max
---[[
-LAWLYFISH.FishList = {
-    {Name="Anabas",         Weight = 90,  Worth = 40, Lengths = {15, 30}, Mdl = "FUCK" },
-    {Name="Anchovy",        Weight = 90,  Worth = 35, Lengths = {2, 40}, Mdl = "FUCK" },
-    {Name="Angelfish",      Weight = 80,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Arowana",        Weight = 80,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Atlantic Bluefin Tuna", Weight = 0.1, Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Atlantic Mackerel", Weight = 40, Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Atlantic Salmon",Weight = 70,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Ayu",            Weight = 10,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Basa",           Weight = 10,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Blue Tang",      Weight = 50,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Bluegill",       Weight = 7,   Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Carp",           Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Clownfish",      Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Garfish",        Weight = 40,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Gilt-Head Bream",Weight = 20,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Goldfish",       Weight = 100, Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Grouper",        Weight = 100, Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Guppy",          Weight = 100, Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Holy Mackerel",  Weight = 0.1, Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Koi",            Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Neon Tetra",     Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Perch",          Weight = 13,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Rainbow Trout",  Weight = 3,   Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Red Drum",       Weight = 45,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Red Snapper",    Weight = 80,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Scad",           Weight = 10,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Siames Fighting Fish", Weight = 10, Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Snapper",        Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Swordfish",      Weight = 3,   Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Tilapia",        Weight = 70,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Zander",         Weight = 2,   Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-    {Name="Zebrafish",      Weight = 90,  Worth = 20, Lengths = {40, 78}, Mdl = "FUCK" },
-}
---]]
 LAWLYFISH.FishList = {
     --Common (90)
     {Name="Anchovy",        Weight = 90,  Worth = 10, MaxLength = 25, Mdl = "FUCK" },
