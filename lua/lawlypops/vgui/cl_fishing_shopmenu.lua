@@ -21,6 +21,12 @@ MENU.ShopMonologue = {
     "I heard someone caught a \"Holy Mackerel\". Sounds fishy to me though."
 }
 
+function MENU:PurchaseItem(item)
+    if DarkRP then
+        local money = 1
+    end
+end
+
 function MENU:FindBucket()
     table.Empty(MENU.Buckets)
     for _, ent in ipairs(ents.FindInSphere(MENU.Entity:GetPos(), LAWLYFISH.SellDistance)) do
@@ -29,6 +35,18 @@ function MENU:FindBucket()
         if #MENU.Buckets >= 99 then break end
     end
     return #MENU.Buckets > 0
+end
+
+function MENU:NewBuyButton(tbl, item)
+    local _pnl = vgui.Create("LButton", PNL)
+    _pnl:Dock(TOP)
+    _pnl:SetText(tbl.Name)
+    _pnl:SetFont("DermaLarge")
+    _pnl:SetTall(40)
+    _pnl.BuyItem = item
+    function _pnl:OnMousePressed()
+        MENU:PurchaseItem(self.BuyItem)
+    end
 end
 
 function MENU:CreateMenu(ent)
@@ -126,7 +144,18 @@ function MENU:CreateMenu(ent)
         PNL.BucketSelectionFrame:SetVisible(false)
     end
 
-    
+    PNL.BuyLabel = vgui.Create("DLabel", PNL)
+    PNL.BuyLabel:Dock(TOP)
+    PNL.BuyLabel:DockMargin(0,20,0,20)
+    PNL.BuyLabel:SetFont("DermaLarge")
+    PNL.BuyLabel:SizeToContentsY()
+    PNL.BuyLabel:SetText("Here's What I'm Selling:")
+
+    PNL.BuyButtons = {}
+
+    for item, tbl in pairs(LAWLYFISH.ShopList) do
+        table.insert(PNL.BuyButtons, self:NewBuyButton(tbl, item))
+    end
 end
 
 LAWLIB:RegisterMenu("fishing_shop", MENU)
