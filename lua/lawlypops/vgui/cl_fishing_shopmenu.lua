@@ -37,16 +37,19 @@ function MENU:FindBucket()
     return #MENU.Buckets > 0
 end
 
-function MENU:NewBuyButton(tbl, item)
+function MENU:NewBuyButton(tbl, itemID)
     local _pnl = vgui.Create("LButton", PNL)
     _pnl:Dock(TOP)
     _pnl:SetText(tbl.Name)
     _pnl:SetFont("DermaLarge")
     _pnl:SetTall(40)
-    _pnl.BuyItem = item
+    _pnl.BuyItem = itemID
+    
     function _pnl:OnMousePressed()
-        MENU:PurchaseItem(self.BuyItem)
+        LAWLIB:PurchaseItem(self.BuyItem)
     end
+
+    return _pnl
 end
 
 function MENU:CreateMenu(ent)
@@ -153,8 +156,8 @@ function MENU:CreateMenu(ent)
 
     PNL.BuyButtons = {}
 
-    for item, tbl in pairs(LAWLYFISH.ShopList) do
-        table.insert(PNL.BuyButtons, self:NewBuyButton(tbl, item))
+    for itemID, tbl in pairs(LAWLYFISH.ShopList) do
+        table.insert(PNL.BuyButtons, self:NewBuyButton(tbl, itemID))
     end
 end
 

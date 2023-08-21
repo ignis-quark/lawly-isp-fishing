@@ -7,4 +7,4 @@ ENT.PrintName = "Tackle And Bait Shop"
 ENT.Spawnable = true
 ENT.Category = "Fishing"
 
-ENT.Model = "models/props_lab/partsbin01.mdl"
+ENT.Model = "models/odessa.mdl"
