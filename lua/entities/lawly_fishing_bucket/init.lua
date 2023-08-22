@@ -20,9 +20,10 @@ end
 
 function ENT:SellAll(ply)
     local totalMoney = 0
-    for _, item in ipairs(self.StoredItems) do
+    for _, itemData in ipairs(self.StoredItems) do
+        local item = itemData.Item
         if !item.Worth then continue end
-        totalMoney = totalMoney + item.Worth
+        totalMoney = totalMoney + LAWLYFISH:ItemWorth(itemData)
     end
     table.Empty(self.StoredItems)
     self:GivePlyMoney(ply, totalMoney)
@@ -31,11 +32,11 @@ end
 function ENT:SellTrashOnly(ply)
     local totalMoney = 0
     for i=#self.StoredItems, 1, -1 do
-        local item = self.StoredItems[i]
+        local item = self.StoredItems[i].Item
         if item.IsTrash then
             table.remove(self.StoredItems, i)
             if item.Worth then
-                totalMoney = totalMoney + item.Worth
+                totalMoney = totalMoney + LAWLYFISH:ItemWorth(self.StoredItems[i])
             end
         end
     end
@@ -44,7 +45,7 @@ end
 
 function ENT:SellItem(ply, index)
     local totalMoney = 0
-    local item = self.StoredItems[index]
+    local item = self.StoredItems[index].Item
     if item.Worth then
         totalMoney = item.Worth
     end
@@ -60,10 +61,6 @@ function ENT:AddItem(data)
         data:Remove()
     end
     local item = itemData.Item
-    --Error check the catch table so all default values don't need to be present
-    if !item.Weight then item.Weight = 100 end
-    if !item.Length then item.Length = -1 end
-    if !item.Worth then item.Worth = 0 end
     if LAWLYFISH:GetRarity(item.Weight).Name == "Relic" then self:EmitSound("player/taunt_medic_heroic.wav") MsgN("Got a Relic!") end
     table.insert(self.StoredItems, itemData)
     self:SetItemCount(#self.StoredItems)
