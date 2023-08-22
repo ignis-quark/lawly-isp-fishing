@@ -199,8 +199,9 @@ function MENU:CreateMenu(ent, tbl, cmd)
             PNL.SellTrashBtn:SetVisible(false)
             PNL.SellAllBtn:SetVisible(false)
         end
-        for i, item in ipairs(_tbl) do
-            if item == nil then continue end
+        for i, itemData in ipairs(_tbl) do
+            if itemData == nil then continue end
+            local item = itemData.Item
             local newItem = vgui.Create("DPanel")
             newItem:SetWide(PNL.ItemList:GetWide())
             newItem:SetTall(40)
@@ -222,22 +223,24 @@ function MENU:CreateMenu(ent, tbl, cmd)
             newItem.txt:CenterVertical()
 
             if item.Worth then
+                local NetWorth = LAWLYFISH:ItemWorth(itemData)
                 MENU.ItemTotal.Count = MENU.ItemTotal.Count + 1
-                MENU.ItemTotal.Worth = MENU.ItemTotal.Worth + item.Worth
+                MENU.ItemTotal.Worth = MENU.ItemTotal.Worth + NetWorth
                 if item.IsTrash then
                     MENU.TrashTotal.Count = MENU.TrashTotal.Count + 1
-                    MENU.TrashTotal.Worth = MENU.TrashTotal.Worth + item.Worth
+                    MENU.TrashTotal.Worth = MENU.TrashTotal.Worth + NetWorth
                 end
-                if item.Worth > MENU.ItemTotal.MostExpensive then MENU.ItemTotal.MostExpensive = item.Worth end
+                if NetWorth > MENU.ItemTotal.MostExpensive then MENU.ItemTotal.MostExpensive = NetWorth end
                 newItem.value = vgui.Create("DLabel", newItem)
-                newItem.value:SetText("$"..item.Worth)
+                newItem.value:SetText("$"..NetWorth)
                 newItem.value:SetFont("DermaLarge")
                 newItem.value:SizeToContentsX()
                 newItem.value:Dock(RIGHT)
             end
             if item.Length > -1 then
+                local NetLen = LAWLYFISH:ItemLength(itemData)
                 newItem.len = vgui.Create("DLabel", newItem)
-                newItem.len:SetText("Length: " .. math.Round(item.Length, 2) .. "cm")
+                newItem.len:SetText("Length: " .. math.Round(NetLen, 2) .. "cm")
                 newItem.len:SetFont("DermaLarge")
                 newItem.len:SizeToContents()
                 newItem.len:Center()
