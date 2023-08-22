@@ -117,7 +117,7 @@ concommand.Add("fishing_debug_bucket", function(ply, cmd, args)
     end
 
     for i=0, 100 do
-        local newItem = LAWLYFISH:GetRandomItem(i*i)
-        bucket:AddItem(newItem)
+        local itemData = LAWLYFISH:GetRandomItem(i*i)
+        bucket:AddItem(itemData)
     end
 end)

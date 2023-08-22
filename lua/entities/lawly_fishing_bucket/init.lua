@@ -52,18 +52,20 @@ function ENT:SellItem(ply, index)
     self:GivePlyMoney(ply, totalMoney)
 end
 
-function ENT:AddItem(ent)
-    if !ent or #self.StoredItems >= LAWLYFISH.BucketCapacity then return end
-    tbl = ent
-    if IsEntity(ent) then
-        tbl = table.Copy(ent.ItemTable)
-        ent:Remove()
+function ENT:AddItem(data)
+    if !data or #self.StoredItems >= LAWLYFISH.BucketCapacity then return end
+    itemData = data
+    if IsEntity(data) then
+        itemData = data.ItemTable
+        data:Remove()
     end
-    if !tbl.Weight then tbl.Weight = 100 end
-    if !tbl.Length then tbl.Length = -1 end
-    if !tbl.Worth then tbl.Worth = 0 end
-    if LAWLYFISH:GetRarity(tbl.Weight).Name == "Relic" then self:EmitSound("player/taunt_medic_heroic.wav") MsgN("Got a Relic!") end
-    table.insert(self.StoredItems, tbl)
+    local item = itemData.Item
+    --Error check the catch table so all default values don't need to be present
+    if !item.Weight then item.Weight = 100 end
+    if !item.Length then item.Length = -1 end
+    if !item.Worth then item.Worth = 0 end
+    if LAWLYFISH:GetRarity(item.Weight).Name == "Relic" then self:EmitSound("player/taunt_medic_heroic.wav") MsgN("Got a Relic!") end
+    table.insert(self.StoredItems, itemData)
     self:SetItemCount(#self.StoredItems)
 end
 

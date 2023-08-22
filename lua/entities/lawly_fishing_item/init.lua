@@ -7,13 +7,14 @@ function ENT:Initialize()
     self:PhysicsInit(SOLID_VPHYSICS)
 end
 
-function ENT:SetItem(item)
-    self.ItemTable = item
-    if self.ItemTable.Class then
-        self.WeaponClass = self.ItemTable.Class
+function ENT:SetItem(itemData)
+    self.ItemData = itemData
+    local item = self.ItemData.Item
+    if item.Class then
+        self.WeaponClass = item.Class
     end
-    if self.ItemTable.Mdl then
-        self:SetModel(self.ItemTable.Mdl)
+    if item.Mdl then
+        self:SetModel(item.Mdl)
     else
         self:SetModel(self.BoxModel)
     end
