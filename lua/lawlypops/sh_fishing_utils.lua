@@ -12,33 +12,44 @@ end
 --Returns the actual caught item
 function LAWLYFISH:GetRandomItem(seed)
     local Catch = LAWLYFISH:GetRandomCatch()
-    local Item = table.Copy(LAWLIB:TableWeightedSelect(Catch.List))
+    local itemData = {Item = LAWLIB:TableWeightedSelect(Catch.List), Mult = 1}
     if Catch.List == LAWLYFISH.TrashList then
-        Item.IsTrash = true
-        Item.Worth = 1
+        itemData.IsTrash = true
+        itemData.Mult = 0
     end
-    LAWLYFISH:SelectRandomStats(Item, seed)
-    return Item
+    LAWLYFISH:SelectRandomStats(itemData, seed)
+    return itemData
 end
 
-function LAWLYFISH:SelectRandomStats(item, seed)
-    if seed == nil then seed = CurTime() end
-    if item.MaxLength then
-        local randVal = util.SharedRandom(seed, 0, 1)
-        item.RandVal = randVal
-        item.Length = Lerp(randVal, LAWLYFISH.MinLength, item.MaxLength)
+function LAWLYFISH:ItemLength(itemData)
+    local item = itemData.itemData
 
-        if item.Worth > 0 then
-            item.Worth = item.Worth - math.floor((1-randVal) * item.Worth * LAWLYFISH.LengthCostMod)
-        end
+    if item.MaxLength then
+        return Lerp(itemData.Mult, LAWLYFISH.MinLength, item.MaxLength) 
     end
+    return 0
+end
+
+function LAWLYFISH:ItemWorth(itemData)
+    local item = itemData.Item
+    if item.Worth > 0 then
+        return item.Worth - math.floor((1-randVal) * item.Worth * LAWLYFISH.LengthCostMod)
+    end
+    return 0
+end
+
+function LAWLYFISH:SelectRandomStats(itemData, seed)
+    if seed == nil then seed = CurTime() end
+
+    itemData.Mult = util.SharedRandom(seed, 0, 1)
+
 end
 
 function LAWLYFISH:GetRarity(Weight)
     local rarity = 1
     local lowest = 1000
-    for i, item in ipairs(LAWLYFISH.Rarities) do
-        if Weight > item.Weight then continue end
+    for i, rarityData in ipairs(LAWLYFISH.Rarities) do
+        if Weight > rarityData.Weight then continue end
         rarity = i
     end
     return LAWLYFISH.Rarities[rarity]
@@ -70,18 +81,20 @@ concommand.Add("fishing_debug_catch", function(ply, cmd, args)
         local newCatch = ents.Create("lawly_fishing_item")
         newCatch:SetPos(Entity(1):GetPos() + Vector(20*row,20*col,10))
         newCatch:Spawn()
-        local data = LAWLYFISH:GetRandomItem()
-        newCatch:SetItem(data)
+        local itemData = LAWLYFISH:GetRandomItem()
+        newCatch:SetItem(itemData)
         row = row + 1
         if row >= rowCount then
             col = col + 1
             row = 0
         end
-        if data.Weight then
-            if rarityCount[data.Weight] then
-                rarityCount[data.Weight] = rarityCount[data.Weight] + 1
+
+        local item = itemData.Item
+        if item.Weight then
+            if rarityCount[item.Weight] then
+                rarityCount[item.Weight] = rarityCount[item.Weight] + 1
             else
-                rarityCount[data.Weight] = 1
+                rarityCount[item.Weight] = 1
             end
         else
             if rarityCount["Weightless"] then
@@ -107,10 +120,11 @@ concommand.Add("fishing_debug_bucket", function(ply, cmd, args)
 
     if args[1] == "1" then
         for i, category in ipairs(LAWLYFISH.Catches) do
-            for _i, item in ipairs(category.List) do
-                if category.List == LAWLYFISH.TrashList then item.IsTrash = true end
-                LAWLYFISH:SelectRandomStats(item, _i)
-                bucket:AddItem(item)
+            for _i, eachItem in ipairs(category.List) do
+                local itemData = {Item = eachItem, Mult = 0}
+                if category.List == LAWLYFISH.TrashList then itemData.IsTrash = true end
+                LAWLYFISH:SelectRandomStats(itemData, _i)
+                bucket:AddItem(itemData)
             end
         end
         return
