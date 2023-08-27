@@ -22,7 +22,7 @@ function LAWLYFISH:GetRandomItem(seed)
 end
 
 function LAWLYFISH:ItemLength(itemData)
-    local item = itemData.itemData
+    local item = itemData.Item
 
     if item.MaxLength then
         return Lerp(itemData.Mult, LAWLYFISH.MinLength, item.MaxLength) 
@@ -32,8 +32,8 @@ end
 
 function LAWLYFISH:ItemWorth(itemData)
     local item = itemData.Item
-    if item.Worth > 0 then
-        return item.Worth - math.floor((1-randVal) * item.Worth * LAWLYFISH.LengthCostMod)
+    if item.Worth and item.Worth > 0 then
+        return item.Worth - math.floor((1-itemData.Mult) * item.Worth * LAWLYFISH.LengthCostMod)
     end
     return 0
 end
@@ -45,11 +45,13 @@ function LAWLYFISH:SelectRandomStats(itemData, seed)
 
 end
 
-function LAWLYFISH:GetRarity(Weight)
+function LAWLYFISH:GetRarity(itemData)
+    local weight = itemData.Item.Weight
+    if weight == nil then return LAWLYFISH.Rarities[1] end
     local rarity = 1
     local lowest = 1000
     for i, rarityData in ipairs(LAWLYFISH.Rarities) do
-        if Weight > rarityData.Weight then continue end
+        if weight > rarityData.Weight then continue end
         rarity = i
     end
     return LAWLYFISH.Rarities[rarity]

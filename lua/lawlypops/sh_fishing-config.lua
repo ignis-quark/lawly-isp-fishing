@@ -12,7 +12,7 @@ LAWLYFISH.MinLength = 2
 
 --Fishing Rod Configs
 //How long before a fish may nibble in seconds {min, max}
-LAWLYFISH.WaitTime = {10, 40}
+LAWLYFISH.WaitTime = {2, 4}
 //How long after a nibble the player can catch the fish.
 LAWLYFISH.CatchWindow = 1
 //How long it takes to reach maximum throw charge in seconds.

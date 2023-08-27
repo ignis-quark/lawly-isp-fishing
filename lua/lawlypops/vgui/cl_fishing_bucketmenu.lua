@@ -87,30 +87,31 @@ function MENU:SelectItem(index)
     surface.PlaySound("items/pickup_quiet_0"..math.random(1,3)..".wav")
     index = math.min(index, #self.Table)
     self.SelectedIndex = index
-    local tbl = MENU.Table[index]
-    if !tbl then MENU:Deselect() return end
+    local itemData = MENU.Table[index]
+    if !itemData then MENU:Deselect() return end
+    local item = itemData.Item
     if PNL.SellMenu then
         PNL.SellItemBtn:SetVisible(true)
         PNL.SellTrashBtn:SetVisible(true)
         PNL.SellAllBtn:SetVisible(true)
     end
     
-    local rarity = LAWLYFISH:GetRarity(tbl.Weight)
+    local rarity = LAWLYFISH:GetRarity(itemData)
 
-    PNL.ItemTitle:SetText(tbl.Name)
-    PNL.ItemPrice:SetText("$"..tbl.Worth)
+    PNL.ItemTitle:SetText(item.Name)
+    PNL.ItemPrice:SetText("$"..LAWLYFISH:ItemWorth(itemData))
     PNL.ItemRarity:SetText(rarity.Name)
     PNL.ItemRarity:SetTextColor(rarity.Color)
 
     PNL.ItemRarity:SetVisible(true)
     PNL.ItemPrice:SetVisible(true)
 
-    if tbl.Mdl then
-        if tbl.Mdl == "FUCK" then
+    if item.Mdl then
+        if item.Mdl == "FUCK" then
             PNL.ModelView:SetModel("models/props/de_inferno/goldfish.mdl")
             PNL.ModelView:GetEntity():SetMaterial("debug/debugempty")
         else
-            PNL.ModelView:SetModel(tbl.Mdl)
+            PNL.ModelView:SetModel(item.Mdl)
         end
         PNL.ModelView:SetVisible(true)
         local ent = PNL.ModelView:GetEntity()
@@ -120,14 +121,15 @@ function MENU:SelectItem(index)
     else
         PNL.ModelView:SetVisible(false)
     end
-    if tbl.Length > 0 then
-        PNL.ItemLength:SetText("Length: " .. math.Round(tbl.Length,2).."cm")
-        local lenCol = Color(255 * (1 - tbl.RandVal), 255 * tbl.RandVal, 0)
+    local itemLength = LAWLYFISH:ItemLength(itemData)
+    if itemLength > 0 then
+        PNL.ItemLength:SetText("Length: " .. math.Round(itemLength,2).."cm")
+        local lenCol = Color(255 * (1 - itemData.Mult), 255 * itemData.Mult, 0)
         PNL.ItemLength:SetTextColor(lenCol)
         PNL.ItemLength:SetVisible(true)
         PNL.ItemLengthBar:SetVisible(true)
         timer.Simple(FrameTime(), function()
-            PNL.ItemLengthBar:SetFraction(tbl.RandVal)
+            PNL.ItemLengthBar:SetFraction(itemData.Mult)
         end)
         PNL.ItemLengthBar:SetFGColor(lenCol)
     else
@@ -237,7 +239,7 @@ function MENU:CreateMenu(ent, tbl, cmd)
                 newItem.value:SizeToContentsX()
                 newItem.value:Dock(RIGHT)
             end
-            if item.Length > -1 then
+            if LAWLYFISH:ItemLength(itemData) > 0 then
                 local NetLen = LAWLYFISH:ItemLength(itemData)
                 newItem.len = vgui.Create("DLabel", newItem)
                 newItem.len:SetText("Length: " .. math.Round(NetLen, 2) .. "cm")
@@ -247,7 +249,7 @@ function MENU:CreateMenu(ent, tbl, cmd)
             end
             
             if item.Weight then
-                local rarity = LAWLYFISH:GetRarity(item.Weight)
+                local rarity = LAWLYFISH:GetRarity(itemData)
                 newItem.txt:SetTextColor(rarity.Color)
             end
             if item.Class then
