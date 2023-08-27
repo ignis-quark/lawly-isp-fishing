@@ -99,7 +99,7 @@ function MENU:SelectItem(index)
     local rarity = LAWLYFISH:GetRarity(itemData)
 
     PNL.ItemTitle:SetText(item.Name)
-    PNL.ItemPrice:SetText("$"..LAWLYFISH:ItemWorth(itemData))
+    PNL.ItemPrice:SetText("$"..itemData.Worth)
     PNL.ItemRarity:SetText(rarity.Name)
     PNL.ItemRarity:SetTextColor(rarity.Color)
 
@@ -121,7 +121,7 @@ function MENU:SelectItem(index)
     else
         PNL.ModelView:SetVisible(false)
     end
-    local itemLength = LAWLYFISH:ItemLength(itemData)
+    local itemLength = itemData.Length
     if itemLength > 0 then
         PNL.ItemLength:SetText("Length: " .. math.Round(itemLength,2).."cm")
         local lenCol = Color(255 * (1 - itemData.Mult), 255 * itemData.Mult, 0)
@@ -149,6 +149,13 @@ end
 function MENU:CreateMenu(ent, tbl, cmd)
     MENU.Entity = ent
     MENU.Table = tbl
+
+    for _, itemData in ipairs(tbl) do
+        itemData.Length = LAWLYFISH:ItemLength(itemData)
+        itemData.Worth = LAWLYFISH:ItemWorth(itemData)
+        itemData.Weight = itemData.Item.Weight or 100
+    end
+    
     PNL = vgui.Create("LFrame")
     PNL:SetTitle("This... Is a Bucket.")
     PNL:SetTitleHoverText("There's More...")
@@ -225,7 +232,7 @@ function MENU:CreateMenu(ent, tbl, cmd)
             newItem.txt:CenterVertical()
 
             if item.Worth then
-                local NetWorth = LAWLYFISH:ItemWorth(itemData)
+                local NetWorth = itemData.Worth
                 MENU.ItemTotal.Count = MENU.ItemTotal.Count + 1
                 MENU.ItemTotal.Worth = MENU.ItemTotal.Worth + NetWorth
                 if item.IsTrash then
@@ -239,8 +246,8 @@ function MENU:CreateMenu(ent, tbl, cmd)
                 newItem.value:SizeToContentsX()
                 newItem.value:Dock(RIGHT)
             end
-            if LAWLYFISH:ItemLength(itemData) > 0 then
-                local NetLen = LAWLYFISH:ItemLength(itemData)
+            if itemData.Length > 0 then
+                local NetLen = itemData.Length
                 newItem.len = vgui.Create("DLabel", newItem)
                 newItem.len:SetText("Length: " .. math.Round(NetLen, 2) .. "cm")
                 newItem.len:SetFont("DermaLarge")
