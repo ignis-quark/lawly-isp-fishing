@@ -8,6 +8,15 @@ function ENT:Initialize()
     self:SetUseType(SIMPLE_USE)
 end
 
+function ENT:CheckForShop(ply)
+    for _, ent in ipairs(ents.FindInSphere(ply:GetPos(), 200)) do
+        if ent:GetClass() == "lawly_tackle_shop" then
+            return true
+        end
+    end
+    return false
+end
+
 function ENT:GivePlyMoney(ply, amount)
     self:SetItemCount(#self.StoredItems)
     if DarkRP then
