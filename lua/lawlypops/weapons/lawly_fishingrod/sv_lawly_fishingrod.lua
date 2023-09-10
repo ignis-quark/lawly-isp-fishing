@@ -4,8 +4,8 @@ function SWEP:TugLine()
     self:Debug("Tugging")
     if !IsValid(self.Bobber) then self:RemoveBobber() return end
     if self.LastNibble + self.NibblePullWindow < CurTime() then return end
+    self.ItemHooked = true
     self:Debug("Hooked Item")
-    self.LineStatus = "ItemHooked"
     self:ReturnLine()
 end
 
@@ -69,13 +69,14 @@ end
 
 function SWEP:RemoveBobber()
     self:Debug(self.Bucket)
-    self.LineStatus = "In"
-    if self:GetBucket() then
+    if self.ItemHooked and self:GetBucket() then
         self.Bucket:AddItem(LAWLYFISH:GetRandomItem())
         self:EmitSound("items/ammo_pickup.wav")
+        self.ItemHooked = false
     else
         self:EmitSound("items/pickup_quiet_03.wav")
     end
+    self.LineStatus = "In"
     if !IsValid(self.Bobber) then return end
     self.Bobber:Remove()
 end
@@ -122,7 +123,7 @@ function SWEP:Think()
         if !self.ReturnTimerStarted then
             timer.Simple(self.RemoveBobberTime, function()
                 self.ReturnTimerStarted = false
-                if !IsValid(self.Bobber) then return end
+                if self.LineStatus != "PullingIn" then return end
                 self:RemoveBobber()
             end)
             self.ReturnTimerStarted = true

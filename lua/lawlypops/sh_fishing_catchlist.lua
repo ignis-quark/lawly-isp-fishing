@@ -29,7 +29,7 @@ LAWLYFISH.FishList = {
     {Name="Pike",           Weight = 70,  Worth = 55, MaxLength = 150,Mdl = "FUCK" },
     {Name="Lobster",        Weight = 60,  Worth = 40, MaxLength = 60, Mdl = "FUCK" },
     {Name="Rainbow Fish",   Weight = 60,  Worth = 40, MaxLength = 10, Mdl = "FUCK" },
-    {Name="Silver Carp",    Weight = 60,  Worth = 50, MaxLength = 110, Mdl = "carp" },
+    {Name="Silver Carp",    Weight = 60,  Worth = 50, MaxLength = 110,Mdl = "carp" },
     --Very Rare (40)
     {Name="Boxer Shrimp",   Weight = 45,  Worth = 10, MaxLength = 4,  Mdl = "FUCK" },
     {Name="Leaping Sturgeon",Weight= 50,  Worth = 50, MaxLength = 720,Mdl = "FUCK" },

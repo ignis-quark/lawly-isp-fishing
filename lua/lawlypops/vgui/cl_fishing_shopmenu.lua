@@ -46,7 +46,7 @@ function MENU:NewBuyButton(tbl, itemID)
     _pnl.BuyItem = itemID
     
     function _pnl:OnMousePressed()
-        LAWLIB:PurchaseItem(self.BuyItem)
+        LAWLIB:PurchaseItem(self.BuyItem, MENU.Entity:GetPos() + MENU.Entity:GetForward()*30 + Vector(0,0,20))
     end
 
     return _pnl

@@ -114,6 +114,7 @@ function MENU:SelectItem(index)
             if string.Right(item.Mdl, 4) == ".mdl" then
                 PNL.ModelView:SetModel(item.Mdl)
             else
+                PNL.ModelView:SetModel("models/lawlypops/fish/"..item.Mdl..".mdl")
                 PNL.ModelView:GetEntity():SetMaterial("materials/models/lawlypops/fish/fish_mod_trimsheet.vmt")
             end
         end
