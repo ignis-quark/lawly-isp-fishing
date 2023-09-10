@@ -108,10 +108,14 @@ function MENU:SelectItem(index)
 
     if item.Mdl then
         if item.Mdl == "FUCK" then
-            PNL.ModelView:SetModel("models/props/de_inferno/goldfish.mdl")
+            PNL.ModelView:SetModel("models/lawlypops/fish/anabass.mdl")
             PNL.ModelView:GetEntity():SetMaterial("debug/debugempty")
         else
-            PNL.ModelView:SetModel(item.Mdl)
+            if string.Right(item.Mdl, 4) == ".mdl" then
+                PNL.ModelView:SetModel(item.Mdl)
+            else
+                PNL.ModelView:GetEntity():SetMaterial("materials/models/lawlypops/fish/fish_mod_trimsheet.vmt")
+            end
         end
         PNL.ModelView:SetVisible(true)
         local ent = PNL.ModelView:GetEntity()
