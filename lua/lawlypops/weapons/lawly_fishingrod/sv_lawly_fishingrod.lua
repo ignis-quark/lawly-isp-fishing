@@ -14,7 +14,7 @@ function SWEP:ThrowLine()
     self.BobberPlaceTime = CurTime()
 
     local ply = self.Owner
-    self:EmitSound(self.ThrowSound)
+    self.Owner:EmitSound(self.ThrowSound)
 	self:SendWeaponAnim( ACT_VM_MISSCENTER )
 
 
@@ -53,7 +53,7 @@ end
 
 --Return the bobber entirely
 function SWEP:ReturnLine()
-    self:EmitSound(self:SpoolSoundRandom())
+    self.Owner:EmitSound(self:SpoolSoundRandom())
 	self:SendWeaponAnim( ACT_VM_HITCENTER )
 
     self.LineStatus = "PullingIn"
@@ -71,10 +71,10 @@ function SWEP:RemoveBobber()
     self:Debug(self.Bucket)
     if self.ItemHooked and self:GetBucket() then
         self.Bucket:AddItem(LAWLYFISH:GetRandomItem())
-        self:EmitSound("items/ammo_pickup.wav")
+        self.Owner:EmitSound("items/ammo_pickup.wav")
         self.ItemHooked = false
     else
-        self:EmitSound("items/pickup_quiet_03.wav")
+        self.Owner:EmitSound("items/pickup_quiet_03.wav")
     end
     self.LineStatus = "In"
     if !IsValid(self.Bobber) then return end
@@ -93,8 +93,8 @@ function SWEP:Think()
         if self.Bobber.IsInWater then
             self:Debug("Line Out")
             self.LineStatus = "Out"
-            self:StopSound(self.ThrowSound)
-            self:EmitSound(self.TaughtSound)
+            self.Owner:StopSound(self.ThrowSound)
+            self.Owner:EmitSound(self.TaughtSound)
             self:CalcNextRandTime()
         end
     end

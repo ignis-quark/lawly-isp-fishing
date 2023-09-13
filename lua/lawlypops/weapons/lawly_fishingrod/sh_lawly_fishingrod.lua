@@ -70,6 +70,18 @@ function SWEP:UpdateConfig()
     self.NibblePullWindow = LAWLYFISH.CatchWindow
 end
 
+function SWEP:PrimaryAttack()
+    return false
+end
+
+function SWEP:SecondaryAttack()
+    return false
+end
+
+function SWEP:Reload()
+    return false
+end
+
 function SWEP:Idle()
 
 	-- Update idle anim

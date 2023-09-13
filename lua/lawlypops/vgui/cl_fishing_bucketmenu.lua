@@ -286,6 +286,7 @@ function MENU:CreateMenu(ent, tbl, cmd)
     PNL.ModelView:SetCamPos(Vector(100,100,100))
     PNL.ModelView:SetFOV(45)
     PNL.ModelView:SetLookAt(Vector(0,0,0))
+    PNL.ModelView:SetMouseInputEnabled(false)
 
     PNL.ItemTitle = vgui.Create("DLabel", PNL.ItemViewFrame)
     PNL.ItemTitle:DockMargin(10,10,0,0)
