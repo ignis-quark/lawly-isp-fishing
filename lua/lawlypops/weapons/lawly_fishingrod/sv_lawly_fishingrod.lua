@@ -53,9 +53,9 @@ end
 
 --Return the bobber entirely
 function SWEP:ReturnLine()
+    self.Owner:StopSound(self.ThrowSound)
     if self.LineStatus == "PullingIn" then return end
     self.Owner:EmitSound(self:SpoolSoundRandom())
-    self.Owner:StopSound(self.ThrowSound)
 	self:SendWeaponAnim( ACT_VM_HITCENTER )
 
     self.LineStatus = "PullingIn"
@@ -71,6 +71,7 @@ end
 
 function SWEP:RemoveBobber()
     self:Debug(self.Bucket)
+    self.Owner:StopSound(self.ThrowSound)
     if self.ItemHooked and self:GetBucket() then
         self.Bucket:AddItem(LAWLYFISH:GetRandomItem())
         self.Owner:EmitSound("items/ammo_pickup.wav")
