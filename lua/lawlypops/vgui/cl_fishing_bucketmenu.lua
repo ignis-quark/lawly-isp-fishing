@@ -332,12 +332,23 @@ function MENU:CreateMenu(ent, tbl, cmd)
 
     //Show buttons if the bucket is selected from the shop.
     local shop = self:FindShop()
-    if shop == nil or #MENU.Table == 0 then return end
+    if shop == nil or #MENU.Table == 0 then
+        PNL.SellHint = vgui.Create("DLabel", PNL)
+        PNL.SellHint:Dock(TOP)
+        PNL.SellHint:SetText("Please return your bucket to the fish market :3")
+        PNL.SellHint:SetTextColor(Color(255,255,255))
+        PNL.SellHint:SetFont("DermaLarge")
+        PNL.SellHint:SizeToContentsY()
+        PNL.SellHint:DockMargin(0,50,0,0)
+        PNL.SellHint:SetContentAlignment(5)
+        return
+    end
 
     PNL.SellMenu = vgui.Create("DPanel", PNL)
     PNL.SellMenu:Dock(FILL)
     PNL.SellMenu:DockPadding(10,0,10,0)
     PNL.SellMenu:SetPaintBackground(false)
+
 
     function PNL.SellMenu:UpdateTotals()
         PNL.MostValText:SetText("Most expensive item: $" .. MENU.ItemTotal.MostExpensive)

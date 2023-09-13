@@ -24,7 +24,7 @@ function ENT:GivePlyMoney(ply, amount)
         amount = DarkRP.formatMoney(amount)
     end
     MsgN(ply:Nick(), " sold fishing items for ", amount)
-    LAWLIB:Notify(ply, "Recieved " .. amount .. " for fishing items.")
+    LAWLIB:Notify(ply, "Received " .. amount .. " for fishing items.")
 end
 
 function ENT:SellAll(ply)
@@ -41,8 +41,9 @@ end
 function ENT:SellTrashOnly(ply)
     local totalMoney = 0
     for i=#self.StoredItems, 1, -1 do
-        local item = self.StoredItems[i].Item
-        if item.IsTrash then
+        local itemData = self.StoredItems[i]
+        item = itemData.Item
+        if itemData.IsTrash then
             table.remove(self.StoredItems, i)
             if item.Worth then
                 totalMoney = totalMoney + LAWLYFISH:ItemWorth(self.StoredItems[i])
