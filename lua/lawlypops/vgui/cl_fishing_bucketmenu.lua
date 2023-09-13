@@ -221,6 +221,7 @@ function MENU:CreateMenu(ent, tbl, cmd)
             newItem:SetTall(40)
             newItem:Dock(TOP)
             newItem:DockMargin(5,5,5,0)
+            newItem:DockPadding(10,0,10,0)
             newItem:SetBackgroundColor(Color(46,46,46))
             newItem:SetMouseInputEnabled(true)
             newItem.Index = i
@@ -233,8 +234,9 @@ function MENU:CreateMenu(ent, tbl, cmd)
             newItem.txt:SetText(item.Name)
             newItem.txt:SetFont("DermaLarge")
             newItem.txt:SizeToContentsY()
-            newItem.txt:SetWide(newItem:GetWide()/2)
+            newItem.txt:SetWide(newItem:GetWide()*0.4)
             newItem.txt:CenterVertical()
+            newItem.txt:Dock(LEFT)
 
             if item.Worth then
                 local NetWorth = itemData.Worth
@@ -257,7 +259,7 @@ function MENU:CreateMenu(ent, tbl, cmd)
                 newItem.len:SetText("Length: " .. math.Round(NetLen, 2) .. "cm")
                 newItem.len:SetFont("DermaLarge")
                 newItem.len:SizeToContents()
-                newItem.len:Center()
+                newItem.len:Dock(LEFT)
             end
             
             if item.Weight then

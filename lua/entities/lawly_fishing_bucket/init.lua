@@ -81,5 +81,6 @@ function ENT:OpenMenu(ply, cmd)
 end
 
 function ENT:Use(ply)
+    if self:GetNWEntity("Owner") != ply then return end
     self:OpenMenu(ply)
 end
