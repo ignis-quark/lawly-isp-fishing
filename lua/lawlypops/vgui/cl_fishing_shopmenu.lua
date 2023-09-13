@@ -30,7 +30,7 @@ end
 function MENU:FindBucket()
     table.Empty(MENU.Buckets)
     for _, ent in ipairs(ents.FindInSphere(MENU.Entity:GetPos(), LAWLYFISH.SellDistance)) do
-        if ent:GetClass() != "lawly_fishing_bucket" then continue end
+        if ent:GetClass() != "lawly_fishing_bucket" or ent:GetNWEntity("Owner") != LocalPlayer() then continue end
         table.insert(MENU.Buckets, ent)
         if #MENU.Buckets >= 99 then break end
     end

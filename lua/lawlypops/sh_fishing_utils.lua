@@ -68,6 +68,8 @@ function LAWLYFISH:CreateRandomItemEnt(pos)
     return item
 end
 
+if CLIENT then return end
+
 concommand.Add("fishing_debug_catch", function(ply, cmd, args)
     local counter = 100
     if #args > 0 then
