@@ -54,6 +54,7 @@ end
 --Return the bobber entirely
 function SWEP:ReturnLine()
     self.Owner:EmitSound(self:SpoolSoundRandom())
+    self.Owner:StopSound(self.ThrowSound)
 	self:SendWeaponAnim( ACT_VM_HITCENTER )
 
     self.LineStatus = "PullingIn"
