@@ -109,8 +109,9 @@ LAWLYFISH.PlushieList = {
 LAWLYFISH.Catches = {
     {List = LAWLYFISH.FishList, Weight = 100},
     {List = LAWLYFISH.TrashList, Weight = 100},
-    {List = LAWLYFISH.WeaponList, Weight = 1},
     {List = LAWLYFISH.UsableList, Weight = 5},
+    //{List = LAWLYFISH.WeaponList, Weight = 1},
+    //{List = LAWLYFISH.PlushieList, Weight = 0.01},
 }
 LAWLIB:TableApplyWeights(LAWLYFISH.Catches)
 

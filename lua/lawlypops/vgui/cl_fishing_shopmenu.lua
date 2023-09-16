@@ -10,7 +10,7 @@ MENU.ShopMonologue = {
     "What can I get for ya?",
     "You're gonna need a pole, right?",
     "I hear the fishing is quite good today.",
-    "Awwww, you're a cute horse aren't ya?",
+    "Awwww, you're a cute critter aren't ya?",
     "Good seeing you!",
     "How's your " .. LAWLIB:GetTimePhrase(true) .. " going?",
     "Having a good " .. LAWLIB:GetTimePhrase(true) .. "?",
@@ -18,23 +18,21 @@ MENU.ShopMonologue = {
     "Not much on the shelf today, but it should get you started.",
     "Remember, you can bring your fish here to sell it!",
     "No fish this " .. LAWLIB:GetTimePhrase(true) .. "?",
-    "I heard someone caught a \"Holy Mackerel\". Sounds fishy to me though."
+    "I heard someone caught a \"Holy Mackerel\". Sounds fishy to me though.",
+    "Hey, how's it goin'?",
+    "Sellin' anything fishy?",
+    "Hello my friend.",
+    "Someone sold my wife...",
+    "There isn't any internet out here...",
+    "You got games on yo' phone?",
+    
+    "I may sell bait in the future."
 }
 
 function MENU:PurchaseItem(item)
     if DarkRP then
         local money = 1
     end
-end
-
-function MENU:FindBucket()
-    table.Empty(MENU.Buckets)
-    for _, ent in ipairs(ents.FindInSphere(MENU.Entity:GetPos(), LAWLYFISH.SellDistance)) do
-        if ent:GetClass() != "lawly_fishing_bucket" or ent:GetNWEntity("Owner") != LocalPlayer() then continue end
-        table.insert(MENU.Buckets, ent)
-        if #MENU.Buckets >= 99 then break end
-    end
-    return #MENU.Buckets > 0
 end
 
 function MENU:NewBuyButton(tbl, itemID)
@@ -68,97 +66,19 @@ function MENU:CreateMenu(ent)
     PNL.GreetingText:SizeToContentsY()
     PNL.GreetingText:SetPaintBackground(true)
     PNL.GreetingText:SetBGColor(Color(49,49,49))
-    local bCount = 0
-    if self:FindBucket() then
-        bCount = #MENU.Buckets
-        if bCount == 1 then
-            PNL.GreetingText:SetText("That's a lovely bucket my friend.")
-        elseif bCount <= 3 then
-            PNL.GreetingText:SetText("Quite a catch today huh?")
-        elseif bCount <= 6 then
-            PNL.GreetingText:SetText("How many buckets do you need?")
-        else
-            PNL.GreetingText:SetText("Dear God...")
-        end
-        self.BucketSelection = 1
-    else
-        self.BucketSelection = 0
-    end
-
-    PNL.BucketSelectionFrame = vgui.Create("DPanel", PNL)
-    PNL.BucketSelectionFrame:Dock(TOP)
-    PNL.BucketSelectionFrame:SetTall(30)
-    PNL.BucketSelectionFrame:SetBackgroundColor(Color(59,59,59))
-
-    PNL.BucketSelectBtnP = vgui.Create("LButton", PNL.BucketSelectionFrame)
-    PNL.BucketSelectBtnP:Dock(LEFT)
-    PNL.BucketSelectBtnP:SetText(" < ")
-    PNL.BucketSelectBtnP:SetFont("DermaLarge")
-    PNL.BucketSelectBtnP:SizeToContentsX()
-    function PNL.BucketSelectBtnP:OnMousePressed()
-        MENU.BucketSelection = MENU.BucketSelection - 1
-        if MENU.BucketSelection < 1 then
-            MENU.BucketSelection = bCount
-        end
-        PNL.BucketSelectText:UpdateText()
-    end
     
-    PNL.BucketSelectText = vgui.Create("DLabel", PNL.BucketSelectionFrame)
-    PNL.BucketSelectText:DockMargin(5,0,5,0)
-    PNL.BucketSelectText:Dock(LEFT)
-    PNL.BucketSelectText:SetFont("DermaLarge")
-    PNL.BucketSelectText:SetText("Bucket 10/10")
-    PNL.BucketSelectText:SetContentAlignment(5)
-    PNL.BucketSelectText:SizeToContentsX()
-    function PNL.BucketSelectText:UpdateText()
-        self:SetText("Bucket " .. MENU.BucketSelection .. "/" .. bCount)
-    end
-    PNL.BucketSelectText:UpdateText()
-
-    PNL.BucketSelectBtnN = vgui.Create("LButton", PNL.BucketSelectionFrame)
-    PNL.BucketSelectBtnN:Dock(LEFT)
-    PNL.BucketSelectBtnN:SetText(" > ")
-    PNL.BucketSelectBtnN:SetFont("DermaLarge")
-    PNL.BucketSelectBtnN:SizeToContentsX()
-    function PNL.BucketSelectBtnN:OnMousePressed()
-        MENU.BucketSelection = MENU.BucketSelection + 1
-        if MENU.BucketSelection > bCount then
-            MENU.BucketSelection = math.min(1,bCount)
-        end
-        PNL.BucketSelectText:UpdateText()
-    end
-
-    PNL.BucketSelectBtnMenu = vgui.Create("LButton", PNL.BucketSelectionFrame)
-    PNL.BucketSelectBtnMenu:DockMargin(10,0,0,0)
-    PNL.BucketSelectBtnMenu:Dock(LEFT)
-    PNL.BucketSelectBtnMenu:SetText(" SELECT ")
-    PNL.BucketSelectBtnMenu:SetFont("DermaLarge")
-    PNL.BucketSelectBtnMenu:SizeToContentsX()
-
-    function PNL.BucketSelectBtnMenu:OnMousePressed()
-        local bucket = MENU.Buckets[MENU.BucketSelection]
-        if IsValid(bucket) then 
-            PNL:Remove()
-            LAWLIB:OpenEntMenu(bucket, "shopbuttons")
-        end
-    end
-
-    if bCount == 0 then
-        PNL.BucketSelectionFrame:SetVisible(false)
-    end
-
     PNL.BuyLabel = vgui.Create("DLabel", PNL)
     PNL.BuyLabel:Dock(TOP)
     PNL.BuyLabel:DockMargin(0,20,0,20)
     PNL.BuyLabel:SetFont("DermaLarge")
     PNL.BuyLabel:SizeToContentsY()
-    PNL.BuyLabel:SetText("Here's What I'm Selling:")
+    PNL.BuyLabel:SetText("Items for Sale to come...")
 
     PNL.BuyButtons = {}
 
-    for itemID, tbl in pairs(LAWLYFISH.ShopList) do
-        table.insert(PNL.BuyButtons, self:NewBuyButton(tbl, itemID))
-    end
+    //for itemID, tbl in pairs(LAWLYFISH.ShopList) do
+    //    table.insert(PNL.BuyButtons, self:NewBuyButton(tbl, itemID))
+    //end
 end
 
 LAWLIB:RegisterMenu("fishing_shop", MENU)
