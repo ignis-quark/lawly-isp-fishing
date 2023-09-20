@@ -337,7 +337,7 @@ function MENU:CreateMenu(ent, tbl, cmd)
     if shop == nil or #MENU.Table == 0 then
         PNL.SellHint = vgui.Create("DLabel", PNL)
         PNL.SellHint:Dock(TOP)
-        PNL.SellHint:SetText("Please return your bucket to the fish market :3")
+        PNL.SellHint:SetText("Please return your bucket to the fish market with fish :3")
         PNL.SellHint:SetTextColor(Color(255,255,255))
         PNL.SellHint:SetFont("DermaLarge")
         PNL.SellHint:SizeToContentsY()
