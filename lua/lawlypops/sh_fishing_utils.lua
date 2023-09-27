@@ -70,6 +70,13 @@ end
 
 if CLIENT then return end
 
+hook.Add("GravGunOnDropped", "lawly_fishing_bucket_selfright", function(ply, ent)
+    if IsValid(ent) and ent:GetClass() == "lawly_fishing_bucket" then
+        local ang = ply:GetAngles()
+        ent:SetAngles(Angle(0, ang.y, 0))
+    end
+end)
+
 concommand.Add("fishing_debug_catch", function(ply, cmd, args)
     local counter = 100
     if #args > 0 then

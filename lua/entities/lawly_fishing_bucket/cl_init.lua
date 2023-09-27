@@ -6,8 +6,6 @@ function ENT:Initialize()
     self:SetSolid(SOLID_VPHYSICS)
 end
 
-ENT.TextColor = Color(255,255,255)
-
 function ENT:Draw()
     self:DrawModel()
     local pos = self:GetPos()
@@ -24,10 +22,10 @@ function ENT:Draw()
         surface.SetDrawColor(0,0,0,230)
         surface.DrawRect(-100,0,200,80)
         if IsValid(owner) then
-            draw.SimpleText(owner:Nick() .. "'s bucket", "DermaLarge", 0, -40, self.TextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText(owner:Nick() .. "'s bucket", "DermaLarge", 0, -40, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
         end
-        draw.SimpleText("ITEMS:", "DermaLarge", 0, 0, self.TextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-        draw.SimpleText(self:GetItemCount().."/"..LAWLYFISH.BucketCapacity, "DermaLarge", 0, 30, self.TextColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+        draw.SimpleText("ITEMS:", "DermaLarge", 0, 0, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+        draw.SimpleText(self:GetItemCount().."/"..LAWLYFISH.BucketCapacity, "DermaLarge", 0, 30, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
         surface.SetDrawColor(0,0,0)
         surface.DrawRect(-95,65,190,10)
         if stored >= LAWLYFISH.BucketCapacity then

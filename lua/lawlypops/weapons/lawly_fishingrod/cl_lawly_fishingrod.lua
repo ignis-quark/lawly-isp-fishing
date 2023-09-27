@@ -4,17 +4,13 @@ local randOffset = Vector(0,0,0)
 local smoothApproachX = 0
 local smoothApproachY = 0
 
-SWEP.WhiteColor = Color(255,255,255)
-SWEP.RedColor = Color(255,0,0)
-
-
 local barX, barY = ScrW()*0.4, ScrH()*0.4
 local barW, barH = ScrW()*0.01, ScrH() * 0.2
 
 function SWEP:DrawHUD()
     draw.NoTexture()
     if !self:GetBucket() then
-        draw.SimpleTextOutlined("No bucket with space available. Catch and Release only.", "DermaDefault", ScrW()/2, ScrH()/2 - 20, self.WhiteColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, self.RedColor)
+        draw.SimpleTextOutlined("No bucket with space available. Catch and Release only.", "DermaDefault", ScrW()/2, ScrH()/2 - 20, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, color_red)
     end
     if self:GetStartChargeTime() != 0 then
         local chargeRatio = math.Clamp((CurTime() - self:GetStartChargeTime()) / self.MaxChargeTime, 0, 1)
