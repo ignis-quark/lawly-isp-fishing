@@ -14,8 +14,9 @@ function SWEP:ThrowLine()
     self.BobberPlaceTime = CurTime()
 
     local ply = self.Owner
-    self.Owner:EmitSound(self.ThrowSound)
+    ply:EmitSound(self.ThrowSound)
 	self:SendWeaponAnim( ACT_VM_MISSCENTER )
+    self.CastPlayerPosition = ply:GetPos()
 
 
     local throwSpeed = self.ThrowStrength * (self.ChargeTime/self.MaxChargeTime)
@@ -23,20 +24,20 @@ function SWEP:ThrowLine()
     if SERVER then
         self:Debug("Creating Bobber")
         self.Bobber = ents.Create("lawly_fishing_bobber")
-        self.Bobber:SetPos(self.Owner:EyePos() + ply:EyeAngles():Forward() * 40)
+        self.Bobber:SetPos(ply:EyePos() + ply:EyeAngles():Forward() * 40)
         self.Bobber:Spawn()
         self.Bobber:PhysWake()
         self.Bobber:GetPhysicsObject():SetVelocity(ply:EyeAngles():Forward() * throwSpeed)
         self.Bobber:GetPhysicsObject():SetBuoyancyRatio(0.7)
         self.BobberMass = self.Bobber:GetPhysicsObject():GetMass()
         self:SetBobber(self.Bobber)
-        local plyMdl = self.Owner:GetModel()
-        local handBone = self.Owner:LookupBone("ValveBiped.Bip01_R_Hand")
-        if self.Owner.IsPony and self.Owner:IsPony() then
-            handBone = self.Owner:LookupBone("Lrig_LEG_FL_FrontHoof")
+        local plyMdl = ply:GetModel()
+        local handBone = ply:LookupBone("ValveBiped.Bip01_R_Hand")
+        if ply.IsPony and ply:IsPony() then
+            handBone = ply:LookupBone("Lrig_LEG_FL_FrontHoof")
         end
         if !handBone then handBone = 0 end
-        self.Line = constraint.CreateKeyframeRope( self:GetPos(), 1, "cable/cable2", nil, self.Owner, self.Owner:WorldToLocal(self.Owner:GetBonePosition(handBone)), handBone, self.Bobber, Vector(0,0,0), 0)
+        self.Line = constraint.CreateKeyframeRope( self:GetPos(), 1, "cable/cable2", nil, ply, ply:WorldToLocal(ply:GetBonePosition(handBone)), handBone, self.Bobber, Vector(0,0,0), 0)
     end
 end
 
@@ -66,6 +67,7 @@ function SWEP:ReturnLine()
         self.Bobber:GetPhysicsObject():SetVelocity((self.BobberOffset + Vector(0,0,heightpulloffset)))
     end
     self.BobberPlaceTime = 0
+    self.CastPlayerPosition = nil
     self.ChargeTime = 0
 end
 
@@ -118,9 +120,15 @@ function SWEP:Think()
         return
     end
 
+    //Bobber must be out to continue past this point.
+
     self.BobberDist = self:GetPos():Distance(self.Bobber:GetPos())
     self.BobberOffset = self.Owner:GetPos() - self.Bobber:GetPos()
 
+    if self.CastPlayerPosition != nil then
+        local plyMoveDist = self.Owner:GetPos():DistToSqr(self.CastPlayerPosition)
+        if plyMoveDist > LAWLYFISH.MaxPlyMovement then self:RemoveBobber() end
+    end
 
     if self.LineStatus == "PullingIn" then
         if !self.ReturnTimerStarted then

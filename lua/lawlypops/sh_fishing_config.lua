@@ -21,3 +21,5 @@ LAWLYFISH.ChargeTime = 3
 LAWLYFISH.ThrowStrength = 800
 //How long to wait for landing in water before auto-pulling in.
 LAWLYFISH.CastTime = 4
+//How far the player may move after throwing the line before reeling in (Squared).
+LAWLYFISH.MaxPlyMovement = 10000

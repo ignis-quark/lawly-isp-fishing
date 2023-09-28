@@ -47,6 +47,7 @@ SWEP.Bobber = nil
 SWEP.Line = nil
 
 SWEP.BobberPlaceTime = 0 -- When the bobber hit water
+SWEP.CastPlayerPosition = nil
 
 SWEP.ChargeTime = 0
 SWEP.Charging = 0
