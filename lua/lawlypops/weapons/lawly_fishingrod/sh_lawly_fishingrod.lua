@@ -2,6 +2,7 @@ SWEP.PrintName = "Fishing Rod"
 SWEP.Category = "Fishing"
 SWEP.Author = "Lawlypops"
 SWEP.Spawnable = true
+SWEP.Instructions = "Hold left click to cast. Right click when the bobber is pulled under to catch! You need a bucket near you."
 
 SWEP.ViewModel = "models/weapons/lawlypops/c_fishing_rod.mdl"
 SWEP.ViewModelFOV = 70
