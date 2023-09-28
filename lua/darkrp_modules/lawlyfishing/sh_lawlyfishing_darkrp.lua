@@ -4,7 +4,10 @@ TEAM_ANGLER = DarkRP.createJob("Angler", {
     weapons = {"lawly_fishingrod"},
     command = "lawlyfish_angler",
     max = 5,
-    model = "models/odessa.mdl",
+    model = {
+        "models/ppm/player_default_base_new_nj.mdl",
+        "models/ppm/player_default_base_new.mdl"
+    },
     salary = 25,
     admin = 0,
     vote = false,

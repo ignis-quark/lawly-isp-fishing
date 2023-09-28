@@ -8,3 +8,7 @@ function ENT:Initialize()
     self:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
     self:ManipulateBoneScale( 0, Vector( 0.3, 0.3, 0.3 ) )
 end
+
+function ENT:GravGunPickupAllowed(ply)
+    return false
+end
