@@ -77,6 +77,12 @@ hook.Add("GravGunOnDropped", "lawly_fishing_bucket_selfright", function(ply, ent
     end
 end)
 
+hook.Add("GravGunPickupAllowed", "lawly_fishing_gravgun", function(ply, ent)
+    if IsValid(ent) and ent:GetClass() == "lawly_fishing_bobber" then
+        return false
+    end
+end)
+
 concommand.Add("fishing_debug_catch", function(ply, cmd, args)
     local counter = 100
     if #args > 0 then
