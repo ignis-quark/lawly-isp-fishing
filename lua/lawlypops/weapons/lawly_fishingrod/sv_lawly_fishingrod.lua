@@ -31,6 +31,7 @@ function SWEP:ThrowLine()
         self.Bobber:GetPhysicsObject():SetBuoyancyRatio(0.7)
         self.BobberMass = self.Bobber:GetPhysicsObject():GetMass()
         self:SetBobber(self.Bobber)
+        self.Bobber.Owner = ply
         local plyMdl = ply:GetModel()
         local handBone = ply:LookupBone("ValveBiped.Bip01_R_Hand")
         if ply.IsPony and ply:IsPony() then

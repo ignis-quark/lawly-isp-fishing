@@ -16,6 +16,10 @@ end
 function ENT:Think()
     self.IsInWater = self:CheckIsInWater()
     if SERVER then
+        if !IsValid(self.Owner) or !IsValid(self.Owner:GetActiveWeapon()) or self.Owner:GetActiveWeapon():GetClass() != "lawly_fishingrod" then
+            self:Remove()
+        end
+
         if self.IsInWater then
             self:GetPhysicsObject():SetDragCoefficient(20)
             self.InWaterTime = CurTime()
