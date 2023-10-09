@@ -7,6 +7,7 @@ resource.AddFile("materials/models/lawlypops/fish/fish_mod_trimsheet.vmt")
 resource.AddFile("materials/models/weapons/lawlypops/fishing_rod/diff_c_fishing_rod.vmt")
 
 util.AddNetworkString("lawly_fishing_sell_items")
+util.AddNetworkString("lawly_fishing_senditemnotif")
 
 net.Receive("lawly_fishing_sell_items", function(len, ply)
     local ent = net.ReadEntity()

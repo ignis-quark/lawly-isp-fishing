@@ -9,10 +9,12 @@ LAWLYFISH.SellDistance = 200
 LAWLYFISH.BucketCapacity = 100
 //Minimum random length for fish to be caught (cm).
 LAWLYFISH.MinLength = 2
+//How long to display a new fish on-screen
+LAWLYFISH.ItemDisplayTime = 5
 
 --Fishing Rod Configs
 //How long before a fish may nibble in seconds {min, max}
-LAWLYFISH.WaitTime = {15, 45}
+LAWLYFISH.WaitTime = {1, 3}
 //How long after a nibble the player can catch the fish.
 LAWLYFISH.CatchWindow = 1.5
 //How long it takes to reach maximum throw charge in seconds.

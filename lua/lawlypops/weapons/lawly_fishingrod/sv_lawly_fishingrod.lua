@@ -76,9 +76,13 @@ function SWEP:RemoveBobber()
     self:Debug(self.Bucket)
     self.Owner:StopSound(self.ThrowSound)
     if self.ItemHooked and self:GetBucket() then
-        self.Bucket:AddItem(LAWLYFISH:GetRandomItem())
+        local ItemData = LAWLYFISH:GetRandomItem()
+        self.Bucket:AddItem(ItemData)
         self.Owner:EmitSound("items/ammo_pickup.wav")
         self.ItemHooked = false
+        net.Start("lawly_fishing_senditemnotif")
+            net.WriteTable(ItemData)
+        net.Send(self.Owner)
     else
         self.Owner:EmitSound("items/pickup_quiet_03.wav")
     end

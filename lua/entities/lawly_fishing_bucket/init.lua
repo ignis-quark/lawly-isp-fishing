@@ -7,6 +7,18 @@ function ENT:Initialize()
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetUseType(SIMPLE_USE)
 end
+function ENT:SpawnFunction(ply, tr, ClassName)
+	if ( !tr.Hit ) then return end
+
+	local SpawnPos = tr.HitPos + tr.HitNormal * 16
+
+    local ent = ents.Create( ClassName )
+	ent:SetPos( SpawnPos )
+	ent:Spawn()
+	ent:Activate()
+	ent:PhysWake()
+    ent:SetNWEntity("Owner", ply)
+end
 
 function ENT:CheckForShop(ply)
     for _, ent in ipairs(ents.FindInSphere(ply:GetPos(), 200)) do

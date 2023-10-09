@@ -2,7 +2,7 @@ LAWLYFISH = LAWLYFISH or {}
 
 LAWLYFISH.FishList = {
     --Common (90)
-    {Name="Anchovy",        Weight = 90,  Worth = 10, MaxLength = 25, Mdl = "anchovy" },
+    {Name="Anchovy",        Weight = 90,  Worth = 10, MaxLength = 25, Mdl = "anchovy", Desc = "A salty and oily fish, sometimes used on pizza for some reason." },
     {Name="Atlantic Mackerel",Weight=90,  Worth = 25, MaxLength = 66, Mdl = "mackerel" },
     {Name="Wells Catfish",  Weight = 90,  Worth = 20, MaxLength = 120,Mdl = "catfish" },
     {Name="Common Tench",   Weight = 90,  Worth = 20, MaxLength = 70, Mdl = "gilt_grouper" },
