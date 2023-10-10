@@ -29,8 +29,8 @@ function ITEMNOTIF:DrawUI()
     descCol.a = fadealpha
     outlineCol.a = fadealpha
 
-    draw.SimpleTextOutlined(Item.Name, "LAWLIB:LargeBold", ScrW()/2, ScrH()*0.7, nameCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 3, outlineCol)
-    draw.SimpleTextOutlined(description, "LAWLIB:Medium", ScrW()/2, ScrH()*0.75, descCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, outlineCol)
+    draw.SimpleTextOutlined(Item.Name, "LAWLIB:ExtraLarge", ScrW()/2, ScrH()*0.7, nameCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 3, outlineCol)
+    draw.SimpleTextOutlined(description, "LAWLIB:Large", ScrW()/2, ScrH()*0.75, descCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 2, outlineCol)
 
     //Remove item if out of time.
     if itemTime > _CT then return end
