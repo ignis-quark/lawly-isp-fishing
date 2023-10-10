@@ -22,7 +22,7 @@ function ITEMNOTIF:DrawUI()
     local itemTime = qData[3]
     local _CT = CurTime()
 
-    local description = Item.Desc or "It's certainly something."
+    local description = Item.Desc or ""
 
     local fadealpha = math.Clamp(itemTime - _CT, 0, 1)*2 * 255
     nameCol.a = fadealpha

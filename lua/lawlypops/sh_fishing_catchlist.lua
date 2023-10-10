@@ -21,14 +21,14 @@ LAWLYFISH.FishList = {
     {Name="Cod",            Weight = 85,  Worth = 120, MaxLength = 200,Mdl = "carp" },
     {Name="Salmon",         Weight = 85,  Worth = 70, MaxLength = 76, Mdl = "salmon" },
     {Name="Brook Trout",    Weight = 80,  Worth = 120, MaxLength = 90, Mdl = "FUCK" },
-    {Name="Albacore Tuna",  Weight = 80,  Worth = 125, MaxLength = 140,Mdl = "bluefin_tuna" },
-    {Name="Sea Turtle",     Weight = 80,  Worth = 120, MaxLength = 120,Mdl = "FUCK" },
-    {Name="Slimy Eel",      Weight = 80,  Worth = 120, MaxLength = 127,Mdl = "FUCK" },
+    {Name="Albacore Tuna",  Weight = 80,  Worth = 125, MaxLength = 140,Mdl = "bluefin_tuna", Desc = "The chicken of the sea. -Kale" },
+    {Name="Sea Turtle",     Weight = 80,  Worth = 120, MaxLength = 120,Mdl = "FUCK", Desc = "We all like turtles. -Browny"},
+    {Name="Slimy Eel",      Weight = 80,  Worth = 120, MaxLength = 127,Mdl = "FUCK", Desc = "It's reely slimey. Ew. -Dawny"},
     --Rare (60)
     {Name="Herring",        Weight = 70,  Worth = 200, MaxLength = 45, Mdl = "salmon" },
     {Name="Pike",           Weight = 70,  Worth = 400, MaxLength = 150,Mdl = "FUCK" },
     {Name="Lobster",        Weight = 60,  Worth = 350, MaxLength = 60, Mdl = "FUCK" },
-    {Name="Rainbow Fish",   Weight = 60,  Worth = 200, MaxLength = 10, Mdl = "arowana" },
+    {Name="Rainbow Trout",   Weight = 60,  Worth = 200, MaxLength = 10, Mdl = "arowana", Desc = "Like a normal trout... but gayer. -Dawny" },
     {Name="Silver Carp",    Weight = 60,  Worth = 350, MaxLength = 110,Mdl = "carp" },
     --Very Rare (40)
     {Name="Boxer Shrimp",   Weight = 45,  Worth = 500, MaxLength = 4,  Mdl = "FUCK" },
@@ -41,20 +41,20 @@ LAWLYFISH.FishList = {
     {Name="Greater Siren",  Weight = 15,  Worth = 800, MaxLength = 97, Mdl = "siames_fighting_fish" },
     {Name="Monkfish",       Weight = 10,  Worth = 800, MaxLength = 150,Mdl = "FUCK" },
     {Name="Swordfish",      Weight = 10,  Worth = 1100,MaxLength = 455,Mdl = "sword_fish" },
-    {Name="Karambwan",      Weight = 10,  Worth = 1500,MaxLength = 20, Mdl = "FUCK" },
+    {Name="Karambwan",      Weight = 10,  Worth = 1500,MaxLength = 20, Mdl = "FUCK", Desc = "Migrated from the Karamhja island of Gielinor. -Kiwi" },
     --Mythical (1)
-    {Name="Atlantic Bluefin Tuna",Weight=8,Worth= 2000,MaxLength = 460,Mdl = "bluefin_tuna" },
+    {Name="Atlantic Bluefin Tuna",Weight=8,Worth= 2000,MaxLength = 460,Mdl = "bluefin_tuna", Desc = "Much bigger chicken of the sea. -Kale" },
     {Name="King Mackerel",  Weight = 7,  Worth = 2000, MaxLength = 184,Mdl = "mackerel" },
-    {Name="Shark",          Weight = 5,  Worth = 2500, MaxLength = 67, Mdl = "FUCK" },
-    {Name="Dark Crab",      Weight = 1,  Worth = 5000, MaxLength = 400,Mdl = "FUCK" },
+    {Name="Shark",          Weight = 5,  Worth = 2500, MaxLength = 67, Mdl = "FUCK", Desc = "It's a pretty resharkable sea creature. -Browny" },
+    {Name="Dark Crab",      Weight = 1,  Worth = 5000, MaxLength = 400,Mdl = "FUCK", Desc = "You don't need to be a member to catch this. -Kiwi" },
     {Name="Manta Ray",      Weight = 1,  Worth = 8000, MaxLength = 700,Mdl = "FUCK" },
     {Name="Pufferfish",     Weight = 1,  Worth = 3000, MaxLength = 120,Mdl = "FUCK" },
     {Name="Lau Lau",        Weight = 1,  Worth = 4000, MaxLength = 280,Mdl = "FUCK" },
     --Relic (0.1)
     {Name="Anglerfish",     Weight = 0.1,Worth = 12400, MaxLength = 150,Mdl = "FUCK" },
     {Name="Golden Trout",   Weight = 0.1,Worth = 13000, MaxLength = 30, Mdl = "snapper" },
-    {Name="Holy Mackerel",  Weight = 0.1,Worth = 25200, MaxLength = 250,Mdl = "mackerel" },
-    {Name="Southern Bluefin Tuna",Weight = 0.1,  Worth = 28200, MaxLength = 245,Mdl = "bluefin_tuna" },
+    {Name="Holy Mackerel",  Weight = 0.1,Worth = 25200, MaxLength = 250,Mdl = "mackerel", Desc = "Are these real? Amazing. -Blizzard" },
+    {Name="Southern Bluefin Tuna",Weight = 0.1,  Worth = 28200, MaxLength = 245,Mdl = "bluefin_tuna", Desc = "The unicorn of the sea. -Kale" },
 }
 LAWLIB:TableApplyWeights(LAWLYFISH.FishList)
 
