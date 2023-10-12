@@ -38,7 +38,7 @@ function SWEP:ThrowLine()
             handBone = ply:LookupBone("Lrig_LEG_FL_FrontHoof")
         end
         if !handBone then handBone = 0 end
-        self.Line = constraint.CreateKeyframeRope( self:GetPos(), 1, "cable/cable2", nil, ply, ply:WorldToLocal(ply:GetBonePosition(handBone)), handBone, self.Bobber, Vector(0,0,0), 0)
+        self.Line = constraint.CreateKeyframeRope( self:GetPos(), 0.2, "cable/cable2", nil, ply, ply:WorldToLocal(ply:GetBonePosition(handBone)), handBone, self.Bobber, Vector(0,0,0), 0)
     end
 end
 

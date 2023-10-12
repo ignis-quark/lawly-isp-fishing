@@ -4,5 +4,5 @@ function ENT:Initialize()
     self:SetModel(self.Model)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
-    self:SetColor(color_red)
+    self:SetMaterial("models/lawlypops/bobber")
 end

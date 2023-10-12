@@ -6,5 +6,5 @@ function ENT:Initialize()
     self:SetModel(self.Model)
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetCollisionGroup(COLLISION_GROUP_WORLD)
-    self:ManipulateBoneScale( 0, Vector( 0.3, 0.3, 0.3 ) )
+    self:ManipulateBoneScale( 0, Vector( 0.2, 0.2, 0.2 ) )
 end
