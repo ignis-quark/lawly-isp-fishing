@@ -96,3 +96,16 @@ function ENT:Use(ply)
     if self:GetNWEntity("Owner") != ply then return end
     self:OpenMenu(ply)
 end
+
+function ENT:Think()
+    local owner = self:GetNWEntity("Owner")
+    self:NextThink(CurTime()+5)
+    if !IsValid(owner) then
+        self:Remove()
+        return true
+    end
+    if DarkRP then
+        if owner:getJobTable().name != "Angler" then self:Remove() end
+    end
+    return true
+end
