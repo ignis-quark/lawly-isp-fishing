@@ -9,6 +9,9 @@ end
 function ENT:Draw()
     self:DrawModel()
     local pos = self:GetPos()
+    
+    if pos:DistToSqr(LocalPlayer():GetPos()) > 10000 then return end
+    
     local ang = self:GetAngles()
     local owner = self:GetNWEntity("Owner")
 
