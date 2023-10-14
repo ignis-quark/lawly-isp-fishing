@@ -18,6 +18,11 @@ function ENT:SpawnFunction(ply, tr, ClassName)
 	ent:Activate()
 	ent:PhysWake()
     ent:SetNWEntity("Owner", ply)
+
+    undo.Create("bucket")
+        undo.AddEntity(ent)
+        undo.SetPlayer(ply)
+    undo.Finish()
 end
 
 function ENT:CheckForShop(ply)
