@@ -28,3 +28,15 @@ function ENT:Think()
         end
     end
 end
+
+function ENT:Initialize()
+    self:SetModel(self.Model)
+    self:SetMoveType(MOVETYPE_VPHYSICS)
+    self:SetSolid(SOLID_VPHYSICS)
+    self:SetMaterial("models/lawlypops/bobber")
+    if SERVER then
+        self:SetCollisionGroup(COLLISION_GROUP_WORLD)
+        self:ManipulateBoneScale( 0, Vector( 0.2, 0.2, 0.2 ) )
+        self:PhysicsInit(SOLID_VPHYSICS)
+    end
+end

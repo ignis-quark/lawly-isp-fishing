@@ -57,17 +57,6 @@ function LAWLYFISH:GetRarity(itemData)
     return LAWLYFISH.Rarities[rarity]
 end
 
-function LAWLYFISH:CreateRandomItemEnt(pos)
-    if pos == nil then
-        MsgN("[Fishing] No position provided for generating an item. Escaping.")
-        return
-    end
-    local item = ents.Create("lawly_fishing_item")
-    item:Spawn()
-    item:SetItem(LAWLYFISH:GetRandomItem())
-    return item
-end
-
 if CLIENT then return end
 
 hook.Add("GravGunOnDropped", "lawly_fishing_bucket_selfright", function(ply, ent)
@@ -81,48 +70,6 @@ hook.Add("GravGunPickupAllowed", "lawly_fishing_gravgun", function(ply, ent)
     if IsValid(ent) and ent:GetClass() == "lawly_fishing_bobber" then
         return false
     end
-end)
-
-concommand.Add("fishing_debug_catch", function(ply, cmd, args)
-    local counter = 100
-    if #args > 0 then
-        counter = args[1]
-    end
-    local rowCount = math.floor(math.sqrt(counter))
-    local row = 0
-    local col = 0
-
-    local rarityCount = {}
-
-    for i=0, counter-1, 1 do
-        local newCatch = ents.Create("lawly_fishing_item")
-        newCatch:SetPos(Entity(1):GetPos() + Vector(20*row,20*col,10))
-        newCatch:Spawn()
-        local itemData = LAWLYFISH:GetRandomItem()
-        newCatch:SetItem(itemData)
-        row = row + 1
-        if row >= rowCount then
-            col = col + 1
-            row = 0
-        end
-
-        local item = itemData.Item
-        if item.Weight then
-            if rarityCount[item.Weight] then
-                rarityCount[item.Weight] = rarityCount[item.Weight] + 1
-            else
-                rarityCount[item.Weight] = 1
-            end
-        else
-            if rarityCount["Weightless"] then
-                rarityCount["Weightless"] = rarityCount["Weightless"] + 1
-            else
-                rarityCount["Weightless"] = 1
-            end
-        end
-    end
-    MsgN("Created " .. counter .. " fishing items. Spawned amount by rarity: ")
-    PrintTable(rarityCount)
 end)
 
 concommand.Add("fishing_debug_bucket", function(ply, cmd, args)
