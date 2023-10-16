@@ -57,6 +57,24 @@ function LAWLYFISH:GetRarity(itemData)
     return LAWLYFISH.Rarities[rarity]
 end
 
+function LAWLYFISH:GetModel(item)
+    local mdl = item.Mdl
+    local fallback = "models/lawlypops/fish/gilt_headbream.mdl"
+    if mdl == nil then
+        return false
+    end
+    if mdl == "FUCK" then
+        return fallback
+    else
+        if string.Right(item.Mdl, 4) == ".mdl" then
+            return mdl
+        else
+            return "models/lawlypops/fish/"..mdl..".mdl"
+        end
+    end
+    return fallback
+end
+
 if CLIENT then return end
 
 hook.Add("GravGunOnDropped", "lawly_fishing_bucket_selfright", function(ply, ent)

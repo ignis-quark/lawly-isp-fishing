@@ -10,8 +10,11 @@ ENT.Model = "models/props_c17/metalPot002a.mdl"
 
 function ENT:SetupDataTables()
     self:NetworkVar("Int", 0, "Temp")
+    self:NetworkVar("String", 0, "Item")
+    self:NetworkVar("Int", 1, "Amount")
     if SERVER then
         self:SetTemp(0)
+        self:SetAmount(0)
     end
 end
 
@@ -35,6 +38,15 @@ if SERVER then
 
     function ENT:HeatUp()
         self:SetTemp(math.min(40, self:GetTemp()+3))
+    end
+
+    function ENT:PhysicsCollide(colData, collider)
+        local ent = colData.HitEntity
+        if !IsValid(ent) or ent:GetClass() != "lawly_fishing_item" then return end
+        if ent.ItemType == self:GetItem() then
+            self:SetAmount(self:GetAmount() + 1)
+            ent:Remove()
+        end
     end
 end
 
