@@ -107,17 +107,7 @@ function MENU:SelectItem(index)
     PNL.ItemPrice:SetVisible(true)
 
     if item.Mdl then
-        if item.Mdl == "FUCK" then
-            PNL.ModelView:SetModel("models/lawlypops/fish/gilt_headbream.mdl")
-            PNL.ModelView:GetEntity():SetMaterial("materials/models/lawlypops/fish/fish_mod_trimsheet.vmt")
-        else
-            if string.Right(item.Mdl, 4) == ".mdl" then
-                PNL.ModelView:SetModel(item.Mdl)
-            else
-                PNL.ModelView:SetModel("models/lawlypops/fish/"..item.Mdl..".mdl")
-                PNL.ModelView:GetEntity():SetMaterial("materials/models/lawlypops/fish/fish_mod_trimsheet.vmt")
-            end
-        end
+        PNL.ModelView:SetModel(LAWLYFISH:GetModel(item))
         PNL.ModelView:SetVisible(true)
         local ent = PNL.ModelView:GetEntity()
         local scale = ent:GetModelRadius()
